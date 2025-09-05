@@ -4,7 +4,7 @@ import ItemCard from './ItemCard'
 import Link from 'next/link'
 
 const DisplayProducts = async ({ category }) => {
-    const data = await getProductsByCategory(category)
+    const  data  = await getProductsByCategory(category)
     return (
         <section >
             <div className='flex justify-between items-center' >

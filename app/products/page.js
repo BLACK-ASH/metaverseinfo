@@ -1,22 +1,26 @@
 import FilterItem from '@/components/FilterItem';
 import ItemCard from '@/components/ItemCard';
+import CustomPagination from '@/components/PageFooter';
 import { getProducts } from '@/lib/products';
+import { Suspense } from 'react';
 
 const products = async ({ searchParams }) => {
 
-    const { query, category, sort, max } = await searchParams
-    const data = await getProducts(query, category, sort, max)
+    const { query, category, sort, max, page, limit } = await searchParams
+    const { data, count } = await getProducts(query, category, sort, max, page || 1, limit || 8)
 
     return (
         <div className='w-full'>
             {category &&
                 (<div className='py-3 flex gap-4 flex-col lg:flex-row justify-between'>
                     <h1 className='text-2xl font-bold'>{category.toUpperCase()}s</h1>
-                    <FilterItem />
+                    <Suspense>
+                        <FilterItem />
+                    </Suspense>
                 </div>)
             }
             <h1 className='text-muted-foreground  font-bold'> search results for {query}</h1>
-            <p className='text-muted-foreground my-3'>{data?.length} results found</p>
+            <p className='text-muted-foreground my-3'>{count} results found</p>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 '>
                 {data?.map((product) => (
                     <ItemCard
@@ -30,6 +34,9 @@ const products = async ({ searchParams }) => {
                     />
                 ))}
             </div>
+            <Suspense>
+                <CustomPagination count={count} limit={8} />
+            </Suspense>
         </div>
     )
 }

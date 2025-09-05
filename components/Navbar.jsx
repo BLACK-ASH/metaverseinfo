@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { SidebarTrigger } from './ui/sidebar'
 import { ModeToggle } from './ThemeController'
 import SearchBar from './SearchBar'
@@ -15,7 +15,9 @@ const Navbar = () => {
                 <p className="font-bold text-lg md:text-2xl">Metaverse <span className="text-red-500">Info</span></p>
             </div>
             <div className="flex justify-end items-center gap-2 flex-1  lg:max-w-1/3" >
-                <SearchBar className={"hidden md:flex"} />
+                <Suspense>
+                    <SearchBar className={"hidden md:flex"} />
+                </Suspense>
                 <CartButton />
                 <ModeToggle />
             </div>

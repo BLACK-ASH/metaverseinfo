@@ -41,7 +41,7 @@ const ItemCard = ({ name,id, price, img, catgory, desc }) => {
                     &#8377; {price}
                 </div>
                 <div>
-                    <Button onClick={() => addProduct({ id,quantity:1 })} className={"cursor-pointer"}><ShoppingCart /> Add to Cart</Button>
+                    <Button onClick={() => addProduct(id)} className={"cursor-pointer"}><ShoppingCart /> Add to Cart</Button>
                 </div>
             </CardFooter>
 

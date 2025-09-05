@@ -1,4 +1,4 @@
-import { Cable, Camera, ComputerIcon, ContainerIcon, CpuIcon, DatabaseBackupIcon, Fan, GpuIcon, HeadsetIcon, Home, InfoIcon, KeyboardIcon, KeyboardMusicIcon, LucidePower, MemoryStickIcon, MicIcon, Monitor, MonitorSpeaker, MouseIcon, ShoppingCart, SpeakerIcon } from "lucide-react"
+import { Cable, Camera, ComputerIcon, ContainerIcon, CpuIcon, DatabaseBackupIcon, Fan, GpuIcon, HeadsetIcon, Home, KeyboardIcon, KeyboardMusicIcon, LucidePower, MemoryStickIcon, MicIcon, Monitor, MonitorSpeaker, MouseIcon, ShoppingCart, SpeakerIcon } from "lucide-react"
 
 import {
     Sidebar,
