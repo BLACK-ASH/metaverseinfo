@@ -1,16 +1,20 @@
 "use client"
 import CartItemCard from '@/components/CartItemCard';
+import CartItemSkeleton from '@/components/CartItemSkeleton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getProductsById } from '@/lib/products';
 import useCartStore from '@/stores/cartStore';
 import { Separator } from '@radix-ui/react-dropdown-menu';
+import { set } from 'mongoose';
 import { useEffect, useState } from 'react';
+
 
 const cartPage = () => {
   const cart = useCartStore((state) => state.cart);
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchData() {
@@ -20,15 +24,20 @@ const cartPage = () => {
       }
 
       try {
-        const results = await Promise.all(
-          cart.map(async (item) => {
-            const product = await getProductsById(item.id); // plain object
-            return { ...product, quantity: item.quantity };
-          })
-        );
-        setItems(results);
-      } catch (err) {
-        console.error("Failed to fetch cart items:", err);
+        const ids = cart.map((item) => item.id);
+        const products = await getProductsById(ids);
+        console.log(products);
+
+
+        const merged = products.map((product) => {
+          const cartItem = cart.find((c) => c.id === product._id.toString());
+          return { ...product, quantity: cartItem?.quantity || 1 };
+        });
+
+        setItems(merged);
+        setLoading(false)
+      } catch (error) {
+        console.error("Error fetching products:", error);
       }
     }
 
@@ -38,12 +47,11 @@ const cartPage = () => {
 
   return (
     <div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
-
       <ScrollArea className={"flex-1 col-span-2 h-[80vh] border p-4 rounded-md box-border"} >
+        {(cart.length === 0 && !loading) && <p className='text-muted-foreground'>Your cart is empty</p>}
+        {loading && <CartItemSkeleton />}
         {items?.map((item) => (<CartItemCard key={JSON.stringify(item._id)} data={item} />))}
       </ScrollArea>
-
-
       <Card>
         <CardHeader>
           <h1 className='text-2xl font-bold'>Cart Summary </h1>

@@ -15,7 +15,7 @@ const DisplayProducts = async ({ category }) => {
                 {data?.map((product) => (
                     <ItemCard
                         key={product._id}
-                        id={JSON.stringify(product._id)}
+                        id={product._id}
                         name={product.name}
                         desc={product.desc}
                         price={product.price}

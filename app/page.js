@@ -1,4 +1,5 @@
 import CustomBuilds from "@/components/CustomBuilds";
+import DisplayCardSkeleton from "@/components/DisplayCardSkeleton";
 import DisplayCategory from "@/components/DisplayCategory";
 import DisplayProducts from "@/components/DisplayProducts";
 import HomeHeroSection from "@/components/HomeHeroSection";
@@ -19,7 +20,7 @@ export default async function Home({ searchParams }) {
         </Suspense>
       </div>
 
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<DisplayCardSkeleton />}>
         <DisplayProducts category={category || "processor"} />
       </Suspense>
     </div>

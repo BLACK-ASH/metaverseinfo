@@ -5,6 +5,7 @@ import { Button } from './ui/button'
 import { ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import useCartStore from '@/stores/cartStore'
+import { AspectRatio } from './ui/aspect-ratio'
 
 export const LoadingImg = () => {
     return (
@@ -14,25 +15,22 @@ export const LoadingImg = () => {
     )
 }
 
-const ItemCard = ({ name,id, price, img, catgory, desc }) => {
-    const {addProduct} = useCartStore();
+const ItemCard = ({ name, id, price, img, catgory, desc }) => {
+    const { addProduct } = useCartStore();
     return (
         <Card className={'relative'} >
-            <CardContent className={"relative w-full h-52 p-2"}>
+            <AspectRatio ratio={16 / 9}>
                 <Image
                     src={img}
                     alt={name}
                     fill
-                    sizes='w-[90%]'
                     loading='lazy'
                     quality={75}
-                    className='p-2'
-                    style={{ objectFit: "cover" }}
+                    className="rounded-md object-cover px-2"
                 />
-
-            </CardContent>
+            </AspectRatio>
             <CardHeader>
-               
+
                 <Badge variant="outline">{catgory}</Badge>
                 <CardTitle>{name} </CardTitle>
             </CardHeader>

@@ -93,7 +93,7 @@ const DisplayCategory = () => {
     const handleClick = (item) => () => {
         const params = new URLSearchParams(searchParams.toString())
         params.set("category", item)
-        router.push(`${pathname}?${params.toString()}`)
+        router.push(`${pathname}?${params.toString()}`, { scroll: false })
     }
     return (
         <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3'>

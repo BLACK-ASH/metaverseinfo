@@ -4,6 +4,15 @@ import CustomPagination from '@/components/PageFooter';
 import { getProducts } from '@/lib/products';
 import { Suspense } from 'react';
 
+export async function generateMetadata({ searchParams }) {
+    const { category } = await searchParams;
+
+    return {
+        title: `Products - ${category}s`,
+        description: `Metaverse Info deals in - ${category}s`,
+    }
+}
+
 const products = async ({ searchParams }) => {
 
     const { query, category, sort, max, page, limit } = await searchParams
@@ -25,7 +34,7 @@ const products = async ({ searchParams }) => {
                 {data?.map((product) => (
                     <ItemCard
                         key={product._id}
-                        id={JSON.stringify(product._id)}
+                        id={product._id}
                         name={product.name}
                         desc={product.desc}
                         price={product.price}
