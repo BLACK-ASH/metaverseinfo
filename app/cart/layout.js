@@ -1,10 +1,16 @@
+import Script from "next/script"
+
 export const metadata = {
   title: 'Metaverse Info - User Cart',
   description: 'Metaverse Info - User Cart',
 }
-const layout = ({children}) => {
+const layout = ({ children }) => {
   return (
-    <div>{children}</div>
+    <div>{children}
+
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+
+    </div>
   )
 }
 

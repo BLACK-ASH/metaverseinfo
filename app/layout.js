@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
         >
           <SidebarProvider>
             <AppSidebar />
-            <main className="w-full box-border overflow-hidden">
+            <main className="w-full relative box-border overflow-hidden">
               <Navbar />
               <section className="container mx-auto px-4 md:p-6 " >
                 {children}

@@ -3,6 +3,7 @@ import { Cable, Camera, ComputerIcon, ContainerIcon, CpuIcon, DatabaseBackupIcon
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -10,6 +11,10 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { getUser, logoutUser } from "@/lib/auth.action"
+
+import LogoutButton from "./LogoutButton"
+import { Boxes } from "lucide-react"
 
 // Menu items.
 const items = [
@@ -32,6 +37,11 @@ const items = [
         title: "Inventory",
         url: "/inventory",
         icon: DatabaseBackupIcon,
+    },
+    {
+        title:"Orders",
+        url: "/orders",
+        icon: Boxes
     }
 
 ]
@@ -123,9 +133,13 @@ const peripheralCategories = [
     },
 ]
 
-export function AppSidebar() {
+export async function AppSidebar() {
+    const user = await getUser();
+
+
     return (
         <Sidebar collapsible="icon">
+
             <SidebarContent>
                 <SidebarGroup>
                     {/* Menu items */}
@@ -182,6 +196,12 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+            {user && (
+                <SidebarFooter>
+                    <h3>{user?.name}</h3>
+                    <LogoutButton />
+                </SidebarFooter>
+            )}
         </Sidebar>
     )
 }

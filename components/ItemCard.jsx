@@ -6,6 +6,7 @@ import { ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import useCartStore from '@/stores/cartStore'
 import { AspectRatio } from './ui/aspect-ratio'
+import { toast } from 'sonner'
 
 export const LoadingImg = () => {
     return (
@@ -39,7 +40,10 @@ const ItemCard = ({ name, id, price, img, catgory, desc }) => {
                     &#8377; {price}
                 </div>
                 <div>
-                    <Button onClick={() => addProduct(id)} className={"cursor-pointer"}><ShoppingCart /> Add to Cart</Button>
+                    <Button onClick={() => {
+                        addProduct(id)
+                        toast.success("Product added to cart.");
+                    }} className={"cursor-pointer"}><ShoppingCart /> Add to Cart</Button>
                 </div>
             </CardFooter>
 

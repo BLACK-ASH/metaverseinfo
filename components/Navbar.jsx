@@ -4,9 +4,13 @@ import { SidebarTrigger } from './ui/sidebar'
 import { ModeToggle } from './ThemeController'
 import SearchBar from './SearchBar'
 import CartButton from './CartButton'
+import { Button } from './ui/button'
+import { getUser } from '@/lib/auth.action'
+import Link from 'next/link'
 
 
-const Navbar = () => {
+const Navbar = async () => {
+    const user = await getUser();
     return (
         <nav className='flex md:items-center gap-4 justify-between px-4 py-2 sticky top-0 z-50 bg-primary-foreground w-full'>
             <div className="flex items-center gap-2">
@@ -20,6 +24,11 @@ const Navbar = () => {
                 </Suspense>
                 <CartButton />
                 <ModeToggle />
+                <Suspense>
+                    {!user &&
+                        <Button asChild><Link href="/login">Login</Link></Button>
+                    }
+                </Suspense>
             </div>
         </nav>
     )
