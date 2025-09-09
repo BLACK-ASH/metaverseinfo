@@ -15,10 +15,11 @@ import { toast } from 'sonner';
 
 
 const CartPage = () => {
-  const {cart,clearCart} = useCartStore();
+  const { cart, clearCart } = useCartStore();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0) + 150;
 
   const router = useRouter();
@@ -28,45 +29,54 @@ const CartPage = () => {
       toast.error("Please login to checkout.");
       return;
     }
-    const res = await fetch("/api/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ cart, userId: user._id }),
-    });
-    const data = await res.json();
+    try {
+      setIsProcessing(true);
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cart, userId: user._id }),
+      });
+      const data = await res.json();
 
-    const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-      order_id: data.orderID,
-      amount: Math.round(totalPrice * 100),
-      handler: async function (response) {
-        const res = await fetch("/api/orders/verify", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(response),
-        })
-        const data = await res.json();
-        if (data.status === "confirmed") {
-          clearCart();
-          toast.success("Payment successful.");
-          router.push("/orders");
-          return;
-        }
-        else {
-          toast.error(
-            data.error
-          );
-        }
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        order_id: data.orderID,
+        amount: Math.round(totalPrice * 100),
+        handler: async function (response) {
+          const res = await fetch("/api/orders/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(response),
+          })
+          const data = await res.json();
+          if (data.status === "confirmed") {
+            clearCart();
+            toast.success("Payment successful.");
+            router.push("/orders");
+            return;
+          }
+          else {
+            toast.error(
+              data.error
+            );
+          }
+        },
+      };
 
-      },
-    };
-
-    const rzp1 = new window.Razorpay(options);
-    rzp1.open();
+      const rzp1 = new window.Razorpay(options);
+      rzp1.open();
+    }
+    catch (err) {
+      console.log(err);
+      toast.error(err);
+    }
+    finally {
+      setIsProcessing(false);
+    }
   };
 
   useEffect(() => {
@@ -96,7 +106,7 @@ const CartPage = () => {
 
     const fetchUser = async () => {
       try {
-       const data = await getUser();
+        const data = await getUser();
         setUser(data);
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -144,7 +154,7 @@ const CartPage = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button disabled={items.length === 0} onClick={handleCheckout} className="w-full"><ArrowUpRight className="size-4" /> Proceed to Checkout</Button>
+          <Button disabled={items.length === 0|| isProcessing} onClick={handleCheckout} className="w-full"><ArrowUpRight className="size-4" /> Proceed to Checkout</Button>
         </CardFooter>
       </Card>
     </div>

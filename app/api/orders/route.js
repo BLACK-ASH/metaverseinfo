@@ -44,7 +44,7 @@ export async function POST(req) {
                 product: item._id,      // ✅ correct field name
                 quantity: item.quantity,
             })),
-            totalPrice: order.amount,
+            totalPrice: order.amount/100,
             receipt: order.receipt,
             paymentStatus: "pending",
         });
