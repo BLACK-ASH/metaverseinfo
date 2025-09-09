@@ -34,16 +34,24 @@ const items = [
         icon: ComputerIcon,
     },
     {
+        title: "My Orders",
+        url: "/my-orders",
+        icon: Boxes
+    }
+
+]
+
+const adminRoute = [
+    {
         title: "Inventory",
         url: "/inventory",
         icon: DatabaseBackupIcon,
     },
     {
-        title:"Orders",
+        title: "Orders",
         url: "/orders",
-        icon: Boxes
-    }
-
+        icon: MonitorSpeaker,
+    },
 ]
 
 const productCategories = [
@@ -159,6 +167,24 @@ export async function AppSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
+                {/* Admin */}
+                {user?.role === "admin" && <SidebarGroup>
+                    <SidebarGroupLabel>Admin</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            {adminRoute.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton asChild>
+                                        <a href={item.url}>
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </a>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>}
                 {/* Products */}
                 <SidebarGroup>
                     <SidebarGroupLabel>Products</SidebarGroupLabel>

@@ -56,7 +56,7 @@ const CartPage = () => {
           if (data.status === "confirmed") {
             clearCart();
             toast.success("Payment successful.");
-            router.push("/orders");
+            router.push("/my-orders");
             return;
           }
           else {
