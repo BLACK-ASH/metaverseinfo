@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select"
 import { addProduct } from "@/lib/products"
 import { toast } from "sonner"
+import { Textarea } from "./ui/textarea"
 
 const categoryList = category.map((item) => item.value)
 
@@ -61,7 +62,7 @@ const AddProduct = () => {
     })
 
     // 2. Define a submit handler.
-    async function onSubmit (values) {
+    async function onSubmit(values) {
         const res = await addProduct(values.name, values.desc, values.price, values.img, values.category);
         if (res.status === "success") {
             form.reset();
@@ -96,7 +97,7 @@ const AddProduct = () => {
                             <FormItem>
                                 <FormLabel>Product Description</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Product Description" {...field} />
+                                    <Textarea placeholder="Product Description" {...field} />
                                 </FormControl>
                                 <FormDescription>
                                     This is your Product description.

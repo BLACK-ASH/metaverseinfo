@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from './ui/button'
 import { Search } from 'lucide-react'
 import { useRef } from "react"
-import { usePathname, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 const SearchBar = ({ className }) => {

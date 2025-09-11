@@ -31,9 +31,8 @@ const ItemCard = ({ name, id, price, img, catgory, desc }) => {
                 />
             </AspectRatio>
             <CardHeader>
-
                 <Badge variant="outline">{catgory}</Badge>
-                <CardTitle>{name} </CardTitle>
+                <CardTitle>{name}</CardTitle>
             </CardHeader>
             <CardFooter className={"flex justify-between"}>
                 <div className='font-bold'>

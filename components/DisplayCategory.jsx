@@ -2,6 +2,7 @@
 import { cn } from '@/lib/utils'
 import { Cable, Camera, ContainerIcon, CpuIcon, Fan, GpuIcon, HeadsetIcon, Keyboard, KeyboardIcon, KeyboardMusicIcon, LucidePower, MemoryStickIcon, MicIcon, Monitor, MonitorSpeakerIcon, MouseIcon, SpeakerIcon } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { ScrollArea, ScrollBar } from './ui/scroll-area'
 export const category = [
     {
         title: "Processors",
@@ -96,11 +97,19 @@ const DisplayCategory = () => {
         router.push(`${pathname}?${params.toString()}`, { scroll: false })
     }
     return (
-        <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3'>
-            {category.map((item) => (
-                <p onClick={handleClick(item.value)} className={cn('text-muted-foreground flex items-center justify-center gap-2 ring-2 p-2 cursor-pointer ring-muted text-center rounded-md', searchParams.get("category") === item && "bg-muted text-muted-foreground")} key={item.title}><item.icon />{item.title}</p>
-            ))}
-        </div>
+        <ScrollArea className="w-full rounded-md border whitespace-nowrap">
+            <div className='flex items-center gap-2 p-2 pb-4'>
+                {category.map((item) => (
+                    <div onClick={handleClick(item.value)} className={cn('text-muted-foreground flex flex-col justify-center items-center gap-2 ring-2 p-4 cursor-pointer ring-muted text-center rounded-md', searchParams.get("category") === item.value && "bg-muted text-muted-foreground")} key={item.title}>
+                        <item.icon />
+                        <p>
+                            {item.title}
+                        </p>
+                    </div>
+                ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+        </ScrollArea>
     )
 }
 

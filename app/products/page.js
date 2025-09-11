@@ -1,6 +1,7 @@
 import FilterItem from '@/components/FilterItem';
 import ItemCard from '@/components/ItemCard';
 import CustomPagination from '@/components/PageFooter';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 import { getProducts } from '@/lib/products';
 import { Suspense } from 'react';
 
@@ -20,6 +21,7 @@ const products = async ({ searchParams }) => {
 
     return (
         <div className='w-full'>
+            <h1 className='text-2xl font-bold'>Products</h1>
             {category &&
                 (<div className='py-3 flex gap-4 flex-col lg:flex-row justify-between'>
                     <h1 className='text-2xl font-bold'>{category.toUpperCase()}s</h1>
@@ -28,7 +30,7 @@ const products = async ({ searchParams }) => {
                     </Suspense>
                 </div>)
             }
-            <h1 className='text-muted-foreground  font-bold'> search results for {query}</h1>
+            <h1 className='text-muted-foreground  font-bold'> search results for {category}, {query}</h1>
             <p className='text-muted-foreground my-3'>{count} results found</p>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 '>
                 {data?.map((product) => (

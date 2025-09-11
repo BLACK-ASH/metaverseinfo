@@ -10,7 +10,7 @@ import { Suspense } from "react";
 export default async function Home({ searchParams }) {
   const { category } = await searchParams
   return (
-    <div className="w-full box-border">
+    <div className="container overflow-hidden box-border mx-auto px-4 md:p-6 ">
       <HomeHeroSection />
       <CustomBuilds />
       <div className='my-10 w-full'>

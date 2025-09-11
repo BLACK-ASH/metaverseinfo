@@ -3,56 +3,14 @@ import { Cable, Camera, ComputerIcon, ContainerIcon, CpuIcon, DatabaseBackupIcon
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
+    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { getUser, logoutUser } from "@/lib/auth.action"
-
-import LogoutButton from "./LogoutButton"
-import { Boxes } from "lucide-react"
-
-// Menu items.
-const items = [
-    {
-        title: "Home",
-        url: "/",
-        icon: Home,
-    },
-    {
-        title: "Cart",
-        url: "/cart",
-        icon: ShoppingCart,
-    },
-    {
-        title: "Custom PC",
-        url: "/custom-pc",
-        icon: ComputerIcon,
-    },
-    {
-        title: "My Orders",
-        url: "/my-orders",
-        icon: Boxes
-    }
-
-]
-
-const adminRoute = [
-    {
-        title: "Inventory",
-        url: "/inventory",
-        icon: DatabaseBackupIcon,
-    },
-    {
-        title: "Orders",
-        url: "/orders",
-        icon: MonitorSpeaker,
-    },
-]
 
 const productCategories = [
     {
@@ -142,52 +100,13 @@ const peripheralCategories = [
 ]
 
 export async function AppSidebar() {
-    const user = await getUser();
-
-
+ 
     return (
-        <Sidebar collapsible="icon">
-
-            <SidebarContent>
-                <SidebarGroup>
-                    {/* Menu items */}
-                    <SidebarGroupLabel>Application</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-                {/* Admin */}
-                {user?.role === "admin" && <SidebarGroup>
-                    <SidebarGroupLabel>Admin</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {adminRoute.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>}
+        <Sidebar  collapsible="icon">
+            <SidebarContent className={"pt-12 "}>
                 {/* Products */}
                 <SidebarGroup>
-                    <SidebarGroupLabel>Products</SidebarGroupLabel>
+                    <SidebarGroupLabel>All Category</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {productCategories.map((item) => (
@@ -222,12 +141,6 @@ export async function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            {user && (
-                <SidebarFooter>
-                    <h3>{user?.name}</h3>
-                    <LogoutButton />
-                </SidebarFooter>
-            )}
         </Sidebar>
     )
 }

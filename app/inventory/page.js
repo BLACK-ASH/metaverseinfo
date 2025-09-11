@@ -13,7 +13,7 @@ const Inventory = async ({ searchParams }) => {
   const { data, count } = await getProducts(query, category, sort, max, page || 1, limit || 18)
 
   return (
-    <div>
+    <div className=''>
       <Suspense>
         <DisplayCategory />
       </Suspense>
@@ -32,7 +32,7 @@ const Inventory = async ({ searchParams }) => {
         </Dialog>
       </div>
 
-      <div className='grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3 gap-3'>
+      <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3'>
         {data?.map((product) => (
           <div className='flex gap-3 ring-2 ring-primary-foreground  p-2 rounded' key={product._id}>
             <Image src={product.img} alt={product.name} width={100} height={100} />

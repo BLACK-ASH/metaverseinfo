@@ -1,5 +1,5 @@
 "use client"
-import  { useRef } from 'react'
+import { useRef } from 'react'
 import {
     Carousel,
     CarouselContent,
@@ -166,6 +166,7 @@ const CustomBuilds = () => {
         <div className='my-10'>
             <h2 className='text-2xl font-bold py-3'>Custom Builds</h2>
             <Carousel
+                className={"mx-8"}
                 opts={{
                     align: "start",
                     loop: true,
@@ -177,7 +178,7 @@ const CustomBuilds = () => {
 
                 <CarouselContent>
                     {data.map((item) => (
-                        <CarouselItem className="md:basis-1/2 lg:basis-1/4" key={item.id}>
+                        <CarouselItem className="md:basis-1/2 lg:basis-1/5" key={item.id}>
                             <CustomBuildCard
                                 name={item.name}
                                 price={item.price}
