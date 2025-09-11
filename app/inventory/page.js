@@ -2,8 +2,7 @@ import AddProduct from '@/components/AddProduct';
 import DisplayCategory from '@/components/DisplayCategory';
 import CustomPagination from '@/components/PageFooter';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+
 import { getProducts } from '@/lib/products';
 import Image from 'next/image';
 import React, { Suspense } from 'react'
@@ -22,20 +21,14 @@ const Inventory = async ({ searchParams }) => {
           <h1 className='text-2xl font-bold'>Inventory</h1>
           <p className='text-muted-foreground my-3'>{count} results found</p>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              Add Product
-            </Button>
-          </DialogTrigger>
-          <AddProduct />
-        </Dialog>
+        <AddProduct />
+
       </div>
 
       <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3'>
         {data?.map((product) => (
           <div className='flex gap-3 ring-2 ring-primary-foreground  p-2 rounded' key={product._id}>
-            <Image src={product.img} alt={product.name} width={100} height={100} />
+            <Image src={typeof (product.img) === 'string' ? product.img : product.img[0]} alt={product.name} width={100} height={100} />
             <div>
               <p>{product.name}</p>
               <p>{product.price}</p>

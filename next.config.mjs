@@ -9,6 +9,13 @@ const nextConfig = {
         pathname: '/**',
         search: '',
       },
+      {
+        protocol: 'https',
+        hostname: "ik.imagekit.io",
+        port: '',
+        pathname: '/**',
+        search: '',
+      }
     ],
   },
 };

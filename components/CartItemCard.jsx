@@ -13,7 +13,7 @@ const CartItemCard = ({ data }) => {
         <div>
             <div className='flex gap-3'>
                 {data.img && (
-                    <Image src={data.img} alt={data.name} width={100} height={100} />
+                    <Image src={data.img[0]} alt={data.name} width={100} height={100} />
                 )}
                 <div className='relative flex-1'>
                     <div className='flex justify-between  gap-2 items-center'>

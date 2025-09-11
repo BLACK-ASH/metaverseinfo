@@ -11,6 +11,7 @@ const HomeHeroSection = () => {
             <div className="w-full relative h-72">
                 <Image src="/side2.jpg" loading="lazy" alt="metaverse" fill style={{ objectFit: "cover" }} />
             </div>
+        
         </section>
     )
 }

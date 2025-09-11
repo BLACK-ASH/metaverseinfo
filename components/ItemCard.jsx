@@ -7,6 +7,8 @@ import Image from 'next/image'
 import useCartStore from '@/stores/cartStore'
 import { AspectRatio } from './ui/aspect-ratio'
 import { toast } from 'sonner'
+import DisplayImages from './DisplayImages'
+import Link from 'next/link'
 
 export const LoadingImg = () => {
     return (
@@ -20,23 +22,19 @@ const ItemCard = ({ name, id, price, img, catgory, desc }) => {
     const { addProduct } = useCartStore();
     return (
         <Card className={'relative'} >
-            <AspectRatio ratio={16 / 9}>
-                <Image
-                    src={img}
-                    alt={name}
-                    fill
-                    loading='lazy'
-                    quality={75}
-                    className="rounded-md object-cover px-2"
-                />
-            </AspectRatio>
+            <DisplayImages duration={5000} className='w-full h-full' images={img} />
             <CardHeader>
                 <Badge variant="outline">{catgory}</Badge>
                 <CardTitle>{name}</CardTitle>
             </CardHeader>
-            <CardFooter className={"flex justify-between"}>
-                <div className='font-bold'>
-                    &#8377; {price}
+            <CardFooter className={"flex items-center justify-between"}>
+                <div>
+                    <p className='font-bold text-lg px-3'>
+                        &#8377; {price}
+                    </p>
+                    <Button variant={"link"} className={"cursor-pointer"}>
+                        <Link href={`/products/${id}`}>View Details</Link>
+                    </Button>
                 </div>
                 <div>
                     <Button onClick={() => {
