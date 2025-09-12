@@ -8,7 +8,7 @@ const useCartStore = create(
 
 
       // Add product (increase quantity if exists)
-      addProduct: (id) =>
+      addProduct: (id, quantity) =>
         set((state) => {
           const existing = state.cart.find((item) => item.id === id);
           if (existing) {
@@ -21,7 +21,7 @@ const useCartStore = create(
             };
           } else {
             return {
-              cart: [...state.cart, { id, quantity: 1 }],
+              cart: [...state.cart, { id, quantity:quantity || 1 }],
             };
           }
         }),

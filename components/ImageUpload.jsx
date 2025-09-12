@@ -10,12 +10,11 @@ import {
 import { useRef, useState } from "react";
 import { Progress } from "./ui/progress";
 import { Button } from "./ui/button";
-import { fi } from "zod/v4/locales";
 import { toast } from "sonner";
 import { Input } from "./ui/input";
 
 // UploadExample component demonstrates file uploading using ImageKit's Next.js SDK.
-const ImageUpload = ({ name, imageUrls, setImageUrls }) => {
+const ImageUpload = ({ name, imageUrls, setImageUrls,uniqeFileName = true }) => {
     // State to keep track of the current upload progress (percentage)
     const [progress, setProgress] = useState(0);
 
@@ -102,7 +101,7 @@ const ImageUpload = ({ name, imageUrls, setImageUrls }) => {
                 },
                 // Abort signal to allow cancellation of the upload if needed.
                 abortSignal: abortController.signal,
-                useUniqueFileName: false,
+                useUniqueFileName:uniqeFileName,
             });
             fileInput.value = null;
             setProgress(0);

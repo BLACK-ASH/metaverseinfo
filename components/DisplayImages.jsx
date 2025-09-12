@@ -15,17 +15,21 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
  *
  * Props:
  * - images: array of image URLs
- * - w: width of each image/item (default 300)
- * - h: height of each image/item (default 200)
- * - ratio: optional aspect ratio (default w/h)
- * - className: optional classes for CarouselItem
- * - carouselClassName: optional classes for Carousel wrapper
+ * - w: base width of each image (default 300)
+ * - h: base height of each image (default 200)
+ * - maxW: max width for large screens (default 800)
+ * - maxH: max height for large screens (default 600)
+ * - ratio: aspect ratio (default w/h)
+ * - className: additional classes for CarouselItem
+ * - carouselClassName: additional classes for Carousel container
  * - autoplayDelay: autoplay speed in ms (default 2500)
  */
 const DisplayImages = ({
   images = [],
   w = 300,
   h = 200,
+  maxW = 800,
+  maxH = 600,
   ratio,
   className = "",
   carouselClassName = "",
@@ -48,16 +52,13 @@ const DisplayImages = ({
     >
       <CarouselContent>
         {images.map((url, i) => (
-          <CarouselItem
-            className={cn("relative", className)}
-            key={i}
-            style={{ width: `${w}px`, height: `${h}px` }}
-          >
+          <CarouselItem className={cn("relative", className)} key={i}>
             <AspectRatio ratio={ratio || w / h} className="w-full h-full">
               <IKImage
                 className="object-cover"
                 urlEndpoint="https://ik.imagekit.io/ashif"
-                src={`${url}?tr=w-${w},h-${h}`}
+                src={`${url}?tr=w-${maxW},h-${maxH},c-fill`}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 fill
                 alt={`Image ${i + 1}`}
               />

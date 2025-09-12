@@ -12,7 +12,7 @@ const Inventory = async ({ searchParams }) => {
   const { data, count } = await getProducts(query, category, sort, max, page || 1, limit || 18)
 
   return (
-    <div className=''>
+    <div className='m-4'>
       <Suspense>
         <DisplayCategory />
       </Suspense>
@@ -22,7 +22,6 @@ const Inventory = async ({ searchParams }) => {
           <p className='text-muted-foreground my-3'>{count} results found</p>
         </div>
         <AddProduct />
-
       </div>
 
       <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3'>
