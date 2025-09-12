@@ -178,7 +178,7 @@ const CustomBuilds = () => {
 
                 <CarouselContent>
                     {data.map((item) => (
-                        <CarouselItem className="md:basis-1/2 lg:basis-1/5" key={item.id}>
+                        <CarouselItem className="md:basis-1/2 lg:basis-1/3 xl:basis-1/5" key={item.id}>
                             <CustomBuildCard
                                 name={item.name}
                                 price={item.price}
