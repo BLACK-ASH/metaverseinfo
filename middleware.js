@@ -4,8 +4,6 @@ import { NextResponse } from 'next/server';
 export async function middleware(request) {
     const token = request.cookies.get("metaverseinfo-token")?.value;
 
-    console.log("Token:", token);
-
     if (!token) {
         console.log("No token found");
         return NextResponse.redirect(new URL('/login', request.url));
@@ -15,10 +13,7 @@ export async function middleware(request) {
         const secret = new TextEncoder().encode(process.env.JWT_SECRET);
         const { payload } = await jwtVerify(token, secret);
 
-        console.log("Payload:", payload);
-
         if (payload.role !== 'admin') {
-            console.log("Not an admin");
             return NextResponse.redirect(new URL('/', request.url));
         }
 

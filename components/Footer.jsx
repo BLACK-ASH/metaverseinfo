@@ -91,18 +91,21 @@ const Footer = () => {
                         </CardDescription>
                         <h3 className='font-bold text-lg'>Follow Us</h3>
                         <CardContent className={"flex mt-2 gap-8 items-center justify-around"}>
-                            <Link href="https://www.instagram.com/metaverseinfo_2022/" target='_blank'>
+                            <Link name="instagram" href="https://www.instagram.com/metaverseinfo_2022/" target='_blank'>
+                                <span className='sr-only'>Instagram Account Link</span>
                                 <FaInstagram className="size-6" />
                             </Link>
-                            <Link href={"https://wa.me/917738101235"} target='_blank'>
+                            <Link name="whatsapp" href={"https://wa.me/917738101235"} target='_blank'>
+                                <span className='sr-only'>Chat on Whatsapp</span>
                                 <FaWhatsapp className="size-6" />
                             </Link>
-                            <Link href="https://youtube.com/@metaverseinfo4002?si=dQlXTsuRJQl3YSK6" target='_blank'>
+                            <Link name="youtube" href="https://youtube.com/@metaverseinfo4002?si=dQlXTsuRJQl3YSK6" target='_blank'>
+                                <span className='sr-only'>Youtube Channel Link</span>
                                 <FaYoutube className="size-6" />
                             </Link>
                         </CardContent>
 
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4475.964818258497!2d72.8171551!3d18.9592159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7cfd15a77c117%3A0x847de22499f57d5d!2sMetaverse%20Info!5e1!3m2!1sen!2sin!4v1757691705088!5m2!1sen!2sin" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" height={200} width={300}></iframe>
+                        <iframe title='Shop Location' src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4475.964818258497!2d72.8171551!3d18.9592159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7cfd15a77c117%3A0x847de22499f57d5d!2sMetaverse%20Info!5e1!3m2!1sen!2sin!4v1757691705088!5m2!1sen!2sin" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" height={200} width={300}></iframe>
                     </div>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 col-span-2 justify-around'>
 

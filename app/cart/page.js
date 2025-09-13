@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getUser } from '@/lib/auth.action';
-import { getProductsById } from '@/lib/products';
+import { getProductsByIds } from '@/lib/products';
 import useCartStore from '@/stores/cartStore';
 import { Separator } from '@radix-ui/react-dropdown-menu';
 import { ArrowUpRight } from 'lucide-react';
@@ -89,7 +89,7 @@ const CartPage = () => {
 
       try {
         const ids = cart.map((item) => item.id);
-        const products = await getProductsById(ids);
+        const products = await getProductsByIds(ids);
 
         const merged = products.map((product) => {
           const cartItem = cart.find((c) => c.id === product._id.toString());
@@ -154,7 +154,9 @@ const CartPage = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button disabled={items.length === 0|| isProcessing} onClick={handleCheckout} className="w-full"><ArrowUpRight className="size-4" /> Proceed to Checkout</Button>
+          <Button disabled={items.length === 0 || isProcessing} onClick={handleCheckout} className="w-full"><ArrowUpRight className="size-4" />
+            {isProcessing ? "Processing..." : "Checkout"}
+          </Button>
         </CardFooter>
       </Card>
     </div>

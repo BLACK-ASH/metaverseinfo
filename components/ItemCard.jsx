@@ -19,8 +19,8 @@ export const LoadingImg = () => {
 const ItemCard = ({ name, id, price, img, catgory, desc }) => {
     const { addProduct } = useCartStore();
     return (
-        <Card className={'relative'} >
-            <DisplayImages duration={5000} className='w-full h-full' images={img} />
+        <Card className={'!pt-0 overflow-hidden'} >
+            <DisplayImages h={400} w={500} ratio={5 / 4} duration={5000} className='w-full h-full' images={img} />
             <CardHeader>
                 <Badge variant="outline">{catgory}</Badge>
                 <CardTitle>{name}</CardTitle>

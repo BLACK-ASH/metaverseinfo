@@ -31,25 +31,25 @@ export const columns = [
 
     },
     {
-        accessorKey: "orderStatus",
+        accessorKey: "status",
         header: "Order Status",
         cell: ({ row }) => {
-            switch (row.getValue("orderStatus")) {
+            switch (row.getValue("status")) {
                 case "processing":
-                    return <div className="text-yellow-700 bg-yellow-50 dark:bg-yellow-700 dark:text-yellow-50 w-fit px-3 rounded-full">{row.getValue("orderStatus")}</div>
+                    return <div className="text-yellow-700 bg-yellow-50 dark:bg-yellow-700 dark:text-yellow-50 w-fit px-3 rounded-full">{row.getValue("status")}</div>
                 case "shipped":
-                    return <div className="text-blue-700 bg-blue-50 dark:bg-blue-700 dark:text-blue-50 w-fit px-3 rounded-full">{row.getValue("orderStatus")}</div>
+                    return <div className="text-blue-700 bg-blue-50 dark:bg-blue-700 dark:text-blue-50 w-fit px-3 rounded-full">{row.getValue("status")}</div>
                 case "delivered":
-                    return <div className="text-green-700 bg-green-50 dark:bg-green-700 dark:text-green-50 w-fit px-3 rounded-full">{row.getValue("orderStatus")}</div>
+                    return <div className="text-green-700 bg-green-50 dark:bg-green-700 dark:text-green-50 w-fit px-3 rounded-full">{row.getValue("status")}</div>
                 case "cancelled":
-                    return <div className="text-red-700 bg-red-50 dark:bg-red-700 dark:text-red-50 w-fit px-3 rounded-full">{row.getValue("orderStatus")}</div>
+                    return <div className="text-red-700 bg-red-50 dark:bg-red-700 dark:text-red-50 w-fit px-3 rounded-full">{row.getValue("status")}</div>
                 default:
-                    return <div className="text-gray-700 bg-gray-50 w-fit px-3 rounded-full">{row.getValue("orderStatus")}</div>
+                    return <div className="text-gray-700 bg-gray-50 w-fit px-3 rounded-full">{row.getValue("status")}</div>
             }
         }
     },
     {
-        accessorKey: "user.name",
+        accessorKey: "username",
         header: "Name",
     },
     {
@@ -65,10 +65,10 @@ export const columns = [
         header: "Receipt ",
     },
     {
-        accessorKey: "totalPrice",
+        accessorKey: "totalAmount",
         header: "Amount",
         cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("totalPrice"))
+            const amount = parseFloat(row.getValue("totalAmount"))
             const formatted = new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "INR",

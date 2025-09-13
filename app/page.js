@@ -1,12 +1,13 @@
 import CustomBuilds from "@/components/CustomBuilds";
 import DisplayCardSkeleton from "@/components/DisplayCardSkeleton";
 import DisplayCategory from "@/components/DisplayCategory";
-import DisplayImages from "@/components/DisplayImages";
 import DisplayProducts from "@/components/DisplayProducts";
 import HomeHeroSection from "@/components/HomeHeroSection";
 import { Suspense } from "react";
 
-
+export async function generateStaticParams(){
+  return []
+}
 
 export default async function Home({ searchParams }) {
   const { category } = await searchParams

@@ -17,7 +17,8 @@ const CartButton = () => {
   return (
     <div className="relative">
       <Button variant="ghost" asChild>
-        <Link href="/cart" className="hidden md:flex">
+        <Link name="cart" href="/cart" className="hidden md:flex">
+        <span className="sr-only">Cart</span>
           <ShoppingCart className="size-4" />
         </Link>
       </Button>

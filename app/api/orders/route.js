@@ -1,5 +1,5 @@
 import connectDB from "@/db/connect";
-import { getProductsById } from "@/lib/products";
+import { getProductsByIds } from "@/lib/products";
 import Orders from "@/models/orders.model";
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
@@ -20,7 +20,7 @@ export async function POST(req) {
         const ids = cart.map((item) => item.id);
         await connectDB();
 
-        const products = await getProductsById(ids); // ensure it accepts array of IDs
+        const products = await getProductsByIds(ids); // ensure it accepts array of IDs
 
         const merged = products.map((product) => {
             const cartItem = cart.find((c) => c.id === product._id.toString());
