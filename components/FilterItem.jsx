@@ -40,7 +40,7 @@ const FilterItem = () => {
             <div className='flex gap-2 w-full items-center'>
                 <p className='font-semibold text-sm text-center w-1/3 md:w-1/4 al'>0 - &#8377;{value[0]}</p>
                 <span className='sr-only'>Price Fliter</span>
-                <Slider value={value} onValueChange={setvalue} min={0} max={100000} step={1} />
+                <Slider value={value} aria-label="Price Filter" onValueChange={setvalue} min={0} max={100000} step={1000} />
             </div>
             <div className='flex gap-2 max-md:justify-end'>
                 <Button onClick={priceFilter} >Apply</Button>

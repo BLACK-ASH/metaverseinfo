@@ -11,83 +11,16 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import { componentCategories, peripheralCategories, subCategories } from '@/lib/catagories.data';
 
-const items = ["office", "gaming", "refurbished"]
+const items = subCategories;
 
-const productCategories = [
-    {
-        title: "Processors",
-        url: "/products?category=processor",
-    },
-    {
-        title: "Graphics Cards",
-        url: "/products?category=graphics-card",
-    },
-    {
-        title: "Motherboards",
-        url: "/products?category=motherboard",
-    },
-    {
-        title: "Storage",
-        url: "/products?category=storage",
-    },
-    {
-        title: "RAM",
-        url: "/products?category=RAM",
-    },
-    {
-        title: "Power Supplies",
-        url: "/products?category=power-supply",
-    },
-    {
-        title: "Cooler",
-        url: "/products?category=cooler",
-    },
-    {
-        title: "Cabinets",
-        url: "/products?category=cabinet",
-    },
-    {
-        title: "Monitors",
-        url: "/products?category=monitor",
-    },
-]
+const productCategories = componentCategories;
 
-const peripheralCategories = [
-
-    {
-        title: "Keyboards",
-        url: "products?category=keyboard",
-    },
-    {
-        title: "Mouses",
-        url: "/products?category=mouse",
-    },
-    {
-        title: "Headsets",
-        url: "/products?category=headset",
-    },
-    {
-        title: "Microphones",
-        url: "/products?category=microphone",
-    },
-    {
-        title: "Webcams",
-        url: "/products?category=webcam",
-    },
-    {
-        title: "Speakers",
-        url: "/products?category=speaker",
-    },
-    {
-        title: "Others",
-        url: "/products?category=other",
-    },
-]
 
 const adminRoute = [
     {
-        title:"Admin",
+        title: "Admin",
         url: "/admin",
 
     },
@@ -99,6 +32,10 @@ const adminRoute = [
         title: "Orders",
         url: "/orders",
     },
+    {
+        title:"Add Product",
+        url:"/add-product",
+    }
 ]
 
 const NavbarMenu = async () => {
@@ -147,9 +84,9 @@ const NavbarMenu = async () => {
                     <NavigationMenuTrigger>Laptops</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         {items.map((item) => (
-                            <NavigationMenuLink key={item} asChild>
-                                <Link href={`/laptops?category=${item}`} className={navigationMenuTriggerStyle()}>
-                                    {item}
+                            <NavigationMenuLink key={item.id} asChild>
+                                <Link href={`/laptops/${item.slug}`} className={navigationMenuTriggerStyle()}>
+                                    {item.title}
                                 </Link>
                             </NavigationMenuLink>
                         ))}
@@ -162,9 +99,9 @@ const NavbarMenu = async () => {
                     <NavigationMenuTrigger>Prebuild PCs</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         {items.map((item) => (
-                            <NavigationMenuLink key={item} asChild>
-                                <Link href={`/prebuild-pc?category=${item}`} className={navigationMenuTriggerStyle()}>
-                                    {item}
+                            <NavigationMenuLink key={item.id} asChild>
+                                <Link href={`/prebuild-pc/${item.slug}`} className={navigationMenuTriggerStyle()}>
+                                    {item.title}
                                 </Link>
                             </NavigationMenuLink>
                         ))}
@@ -178,13 +115,21 @@ const NavbarMenu = async () => {
                     </NavigationMenuLink>
                 </NavigationMenuItem>
 
-                {user?.role === "admin" && adminRoute.map((item) => (
-                    <NavigationMenuItem key={item.title}>
-                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                            <Link href={item.url}>{item.title}</Link>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                ))}
+
+                {user?.role === "admin" && 
+                <NavigationMenuItem>
+                    <NavigationMenuTrigger>Admins</NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                        {adminRoute.map((item) => (
+                            <NavigationMenuLink key={item.title} asChild>
+                                <Link href={item.url} className={navigationMenuTriggerStyle()}>
+                                    {item.title}
+                                </Link>
+                            </NavigationMenuLink>
+                        ))}
+                    </NavigationMenuContent>
+                </NavigationMenuItem>
+                }
             </NavigationMenuList>
 
         </NavigationMenu>

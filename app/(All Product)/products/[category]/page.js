@@ -1,11 +1,29 @@
-"use client";
+import FilterItem from '@/components/FilterItem';
+import ItemCard from '@/components/ItemCard';
+import CustomPagination from '@/components/PageFooter';
+import { componentCategories } from '@/lib/catagories.data';
+import searchProducts from '@/lib/searchProduct';
+import { Suspense } from 'react';
 
-import FilterItem from "@/components/FilterItem";
-import CustomPagination from "@/components/PageFooter";
-import ItemCard from "@/components/ItemCard";
-import { Suspense } from "react";
+export async function generateMetadata({ params }) {
+    const { category } = await params;
+    return {
+        title: category,
+        description: `${category} - Best Deals in Metaverse info store all over the India.`,
+    };
+}
 
-export default function ProductsPageClient({ data, count, category, keyword }) {
+export async function generateStaticParams() {
+    return componentCategories.map((category) => ({
+        category:category.slug
+    }))
+}
+
+const page = async ({ params, searchParams }) => {
+    const { category } = await params;
+    const { keyword, brand, sort, max, page, limit = 8 } = await searchParams;
+    const { data, count } = await searchProducts({ category, keyword, brand, sort, max, page, limit });
+
     return (
         <div className='w-full'>
             <h1 className='text-2xl font-bold'>Products</h1>
@@ -35,8 +53,10 @@ export default function ProductsPageClient({ data, count, category, keyword }) {
                 ))}
             </div>
             <Suspense fallback={<div>Loading...</div>}>
-                <CustomPagination count={count} limit={8} />
+                <CustomPagination count={count} limit={limit} />
             </Suspense>
         </div>
-    );
+    )
 }
+
+export default page

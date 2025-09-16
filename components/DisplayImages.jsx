@@ -26,10 +26,6 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
  */
 const DisplayImages = ({
   images = [],
-  w = 300,
-  h = 200,
-  maxW = 800,
-  maxH = 600,
   ratio,
   className = "",
   carouselClassName = "",
@@ -40,6 +36,7 @@ const DisplayImages = ({
   if (!images || images.length === 0) {
     return <p className="text-muted-foreground">No images to display</p>;
   }
+
 
   return (
     <Carousel
@@ -57,7 +54,7 @@ const DisplayImages = ({
               <IKImage
                 className="object-cover"
                 urlEndpoint="https://ik.imagekit.io/ashif"
-                src={`${url}?tr=w-${maxW},h-${maxH},c-fill`}
+                src={`${url}?c-fill`}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 fill
                 alt={`Image ${i + 1}`}

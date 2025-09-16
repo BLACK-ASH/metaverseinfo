@@ -164,7 +164,7 @@ const CustomBuilds = () => {
     );
     return (
         <div className='my-10'>
-            <h2 className='text-2xl font-bold py-3'>Custom Builds</h2>
+            <h2 className='text-3xl text-center font-bold py-6'>Custom Builds</h2>
             <Carousel
                 className={"mx-8"}
                 opts={{

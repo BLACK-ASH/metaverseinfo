@@ -7,6 +7,7 @@ import useCartStore from '@/stores/cartStore'
 import { toast } from 'sonner'
 import DisplayImages from './DisplayImages'
 import Link from 'next/link'
+import { Separator } from './ui/separator'
 
 export const LoadingImg = () => {
     return (
@@ -20,19 +21,21 @@ const ItemCard = ({ name, id, price, img, catgory, desc }) => {
     const { addProduct } = useCartStore();
     return (
         <Card className={'!pt-0 overflow-hidden'} >
-            <DisplayImages h={400} w={500} ratio={5 / 4} duration={5000} className='w-full h-full' images={img} />
-            <CardHeader>
-                <Badge variant="outline">{catgory}</Badge>
-                <CardTitle>{name}</CardTitle>
-            </CardHeader>
+            <Link href={`/products/all/${id}`}>
+                <DisplayImages h={400} w={500} ratio={5 / 4} duration={5000} className='w-full h-full' images={img} />
+                <Separator className='mb-2' />
+                <CardHeader>
+                    <CardTitle>{name}</CardTitle>
+                    <Badge variant="outline">{catgory}</Badge>
+                </CardHeader>
+            </Link>
             <CardFooter className={"flex items-center justify-between"}>
                 <div>
                     <p className='font-bold text-lg px-3'>
                         &#8377; {price}
                     </p>
-                    <Button variant={"link"} className={"cursor-pointer"}>
-                        <Link href={`/products/${id}`}>View Details</Link>
-                    </Button>
+
+
                 </div>
                 <div>
                     <Button onClick={() => {
@@ -41,7 +44,6 @@ const ItemCard = ({ name, id, price, img, catgory, desc }) => {
                     }} className={"cursor-pointer"}><ShoppingCart /> Add to Cart</Button>
                 </div>
             </CardFooter>
-
         </Card >
     )
 }

@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner";
+import { Separator } from "@/components/ui/separator";
 
 
 const geistSans = Geist({
@@ -34,7 +35,8 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
         >
           <Navbar />
-          <main  >
+          <Separator className={"my-2"}/>
+          <main>
             {children}
           </main>
           <Footer />

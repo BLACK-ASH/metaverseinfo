@@ -4,14 +4,14 @@ import ProductAction from "@/components/ProductAction";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getProductsByIds } from "@/lib/products";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
+
 
 // Optional: Set revalidate to refresh static cache for popular products
 export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
-    const { id } = await params;
-    const product = await getProductsByIds([id]);
+    const { slug } = await params;
+    const product = await getProductsByIds([slug]);
     if (!product || !product[0]) {
         return { title: "Product not found", description: "This product does not exist" };
     }
@@ -25,28 +25,14 @@ export async function generateMetadata({ params }) {
     };
 }
 
-import Products from "@/models/products.model";
-import connectDB from "@/db/connect";
-
-export async function generateStaticParams() {
-    try {
-        await connectDB();
-        const products = await Products.find().select('_id').lean();
-        return products.map((product) => ({
-            id: product._id.toString(),
-        }));
-    } catch (error) {
-        console.error("Error in generateStaticParams:", error);
-        return [];
-    }
-}
-
 export default async function Page({ params }) {
-    const { id } = await params;
+    // replace with slug
+    const { slug } = await params;
     let product;
 
     try {
-        product = await getProductsByIds([id]);
+        // replace the id with slug
+        product = await getProductsByIds([slug]);
         if (!product || !product[0]) {
             notFound();
         }

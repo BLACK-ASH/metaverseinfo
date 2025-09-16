@@ -11,6 +11,7 @@ export async function generateStaticParams(){
 
 export default async function Home({ searchParams }) {
   const { category } = await searchParams
+  
   return (
     <div className="container overflow-hidden box-border mx-auto px-4 md:p-6 ">
       <HomeHeroSection />
