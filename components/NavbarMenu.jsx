@@ -85,7 +85,7 @@ const NavbarMenu = async () => {
                     <NavigationMenuContent>
                         {items.map((item) => (
                             <NavigationMenuLink key={item.id} asChild>
-                                <Link href={`/laptops/${item.slug}`} className={navigationMenuTriggerStyle()}>
+                                <Link href={`/laptops?category=${item.slug}`} className={navigationMenuTriggerStyle()}>
                                     {item.title}
                                 </Link>
                             </NavigationMenuLink>
@@ -100,7 +100,7 @@ const NavbarMenu = async () => {
                     <NavigationMenuContent>
                         {items.map((item) => (
                             <NavigationMenuLink key={item.id} asChild>
-                                <Link href={`/prebuild-pc/${item.slug}`} className={navigationMenuTriggerStyle()}>
+                                <Link href={`/prebuild-pc?category=${item.slug}`} className={navigationMenuTriggerStyle()}>
                                     {item.title}
                                 </Link>
                             </NavigationMenuLink>

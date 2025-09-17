@@ -14,8 +14,8 @@ const productCategories = componentCategories;
 const Footer = () => {
     return (
         <footer className='mt-10 p-4 border-t-2  rounded-none shadow bg-muted' >
-            <CardContent className={"grid gap-8 text-left grid-cols-1 md:grid-cols-2 lg:grid-cols-3"}>
-                <div className='flex flex-col max-md:col-span-2 items-center gap-4'>
+            <CardContent className={"flex flex-col gap-4 md:flex-row"}>
+                <div className='flex flex-col max-md:col-span-2 items-center gap-4 md:w-1/3'>
                     <Image src="/logo.png" alt="logo" width={50} height={50} />
                     <CardTitle className="font-bold  text-lg md:text-2xl">Metaverse <span className="text-red-500">Info</span></CardTitle>
                     <CardDescription>
@@ -39,8 +39,8 @@ const Footer = () => {
 
                     <iframe title='Shop Location' src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4475.964818258497!2d72.8171551!3d18.9592159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7cfd15a77c117%3A0x847de22499f57d5d!2sMetaverse%20Info!5e1!3m2!1sen!2sin!4v1757691705088!5m2!1sen!2sin" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" height={200} width={300}></iframe>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 col-span-2 justify-around'>
 
+                <div className='grid grid-cols-2 lg:grid-cols-4 flex-1 w-full'>
                     <div>
                         <h3 className='font-bold text-lg text-center'>All Categories</h3>
                         <ul className='text-start' >
@@ -71,7 +71,7 @@ const Footer = () => {
                             {items.map((item) => (
                                 <li key={item.id} >
                                     <Button variant={"link"} className="w-full text-start text-muted-foreground hover:text-foreground" asChild>
-                                        <Link href={`/laptops/${item.slug}`}>{item.title}</Link>
+                                        <Link href={`/laptops?category=${item.slug}`}>{item.title}</Link>
                                     </Button>
                                 </li>
                             ))}
@@ -83,12 +83,13 @@ const Footer = () => {
                             {items.map((item) => (
                                 <li key={item.id} >
                                     <Button variant={"link"} className="w-full !!!text-left text-muted-foreground hover:text-foreground" asChild>
-                                        <Link href={`/prebuild-pc/${item.slug}`}>{item.title}</Link>
+                                        <Link href={`/prebuild-pc?category=${item.slug}`}>{item.title}</Link>
                                     </Button>
                                 </li>
                             ))}
                         </ul>
                     </div>
+
                 </div>
             </CardContent>
             <Separator className="bg-border my-2" />

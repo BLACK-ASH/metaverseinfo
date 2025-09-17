@@ -29,7 +29,7 @@ const ItemCard = ({ name, id, price, img, catgory, desc }) => {
                     <Badge variant="outline">{catgory}</Badge>
                 </CardHeader>
             </Link>
-            <CardFooter className={"flex items-center justify-between"}>
+            <CardFooter className={"flex flex-col gap-2 items-start sm:flex-row sm:items-center justify-between"}>
                 <div>
                     <p className='font-bold text-lg px-3'>
                         &#8377; {price}
