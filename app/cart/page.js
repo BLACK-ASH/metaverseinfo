@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from '@/components/auth/auth.context';
 import CartItemCard from '@/components/CartItemCard';
 import CartItemSkeleton from '@/components/skeleton/CartItemSkeleton';
 import { Button } from '@/components/ui/button';
@@ -18,7 +19,7 @@ const CartPage = () => {
   const { cart, clearCart } = useCartStore();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const totalAmount = items.reduce((total, item) => {
@@ -44,7 +45,7 @@ const CartPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ cart, userId: user._id,name:user.name,email:user.email, }),
+        body: JSON.stringify({ cart, userId: user.id, name: user.name, email: user.email, }),
       });
       const data = await res.json();
 
@@ -52,7 +53,13 @@ const CartPage = () => {
         toast.error(data.error);
         return;
       }
+    }
+    catch (err) {
+      console.log(err);
+      toast.error(err);
+    }
 
+    try {
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         order_id: data.paymentOrderId,
@@ -102,7 +109,7 @@ const CartPage = () => {
 
       try {
         const ids = cart.map((item) => item.id);
-        const products = await getProductsByIds(ids);    
+        const products = await getProductsByIds(ids);
 
         const merged = products?.map((product) => {
           const cartItem = cart.find((c) => c.id === product._id.toString());
@@ -117,17 +124,7 @@ const CartPage = () => {
       }
     };
 
-    const fetchUser = async () => {
-      try {
-        const data = await getUser();
-        setUser(data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-
     fetchData();
-    fetchUser();
   }, [cart]);
 
   return (

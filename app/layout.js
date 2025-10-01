@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import { Separator } from "@/components/ui/separator";
+import { AuthProvider } from "@/components/auth/auth.context";
 
 
 const geistSans = Geist({
@@ -34,13 +35,15 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <Separator className={"my-2"}/>
-          <main>
-            {children}
-          </main>
-          <Footer />
-          <Toaster />
+          <AuthProvider>
+            <Navbar />
+            <Separator className={"my-2"} />
+            <main>
+              {children}
+            </main>
+            <Footer />
+            <Toaster />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

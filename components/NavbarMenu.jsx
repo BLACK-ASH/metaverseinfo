@@ -1,4 +1,4 @@
-import { getUser } from '@/lib/auth.action';
+"use client"
 import Link from 'next/link';
 import React, { Suspense } from 'react'
 
@@ -12,6 +12,7 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { componentCategories, peripheralCategories, subCategories } from '@/lib/data/catagories.data';
+import { useAuth } from './auth/auth.context';
 
 const items = subCategories;
 
@@ -38,8 +39,8 @@ const adminRoute = [
     }
 ]
 
-const NavbarMenu = async () => {
-    const user = await getUser();
+const NavbarMenu = () => {
+    const { user } = useAuth();
     return (
         <NavigationMenu suppressHydrationWarning className="z-50" viewport={false}>
 

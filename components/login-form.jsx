@@ -19,8 +19,8 @@ import {
 } from "@/components/ui/form"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
-import { loginUser } from "@/lib/auth.action";
 import { useRouter } from "next/navigation";
+import { useAuth } from "./auth/auth.context";
 
 
 const formSchema = z.object({
@@ -44,8 +44,9 @@ export function LoginForm({
     },
   })
 
+  const {login} = useAuth();
   async function onSubmit(values) {
-    const res = await loginUser(values);
+    const res = await login(values);
 
     if (res.status === 200) {
       toast.success(res.message);
