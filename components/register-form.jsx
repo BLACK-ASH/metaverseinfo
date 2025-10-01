@@ -27,12 +27,8 @@ import { useRouter } from "next/navigation";
 const formSchema = z.object({
   name: z.coerce.string().min(2).max(20),
   email: z.coerce.string().email(),
-  password: z.coerce.string(),
-  phoneNumber: z.coerce.string().min(10, { message: "Invalid phone number" }).max(10, { message: "Invalid phone number ,remove country code +91" }),
-  street: z.coerce.string(),
-  city: z.coerce.string(),
-  state: z.coerce.string(),
-  zip: z.coerce.string(),
+  password: z.coerce.string().min(8, "Password must be at least 8 characters").max(20, "Password must be at most 20 characters"),
+  confirmPassword: z.coerce.string(),
 })
 
 
@@ -49,15 +45,15 @@ export function RegisterForm({
       name: "",
       email: "",
       password: "",
-      phoneNumber: "",
-      street: "",
-      city: "",
-      state: "",
-      zip: "",
+      confirmPassword: "",
     },
   })
 
   async function onSubmit(values) {
+    if (values.password !== values.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
     const res = await registerUser(values);
 
     if (res.status === 200) {
@@ -123,74 +119,18 @@ export function RegisterForm({
 
             <FormField
               control={form.control}
-              name="phoneNumber"
+              name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
-                  <FormDescription>Remove country code +91</FormDescription>
+                  <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="1234567890" {...field} />
+                    <Input type={"password"} placeholder="confirm password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="street"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Street</FormLabel>
-                  <FormControl>
-                    <Input placeholder="street" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="city"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>City</FormLabel>
-                  <FormControl>
-                    <Input placeholder="city" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="state"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>State</FormLabel>
-                  <FormControl>
-                    <Input placeholder="state" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="zip"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Zip</FormLabel>
-                  <FormControl>
-                    <Input placeholder="zip" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <Button disabled={form.formState.isSubmitting} type="submit">
               {form.formState.isSubmitting ?
                 <div className="flex items-center justify-center gap-2">

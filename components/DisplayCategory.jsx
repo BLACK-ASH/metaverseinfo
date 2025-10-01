@@ -2,7 +2,7 @@
 import { cn } from '@/lib/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { ScrollArea, ScrollBar } from './ui/scroll-area'
-import { componentCategories, peripheralCategories } from '@/lib/catagories.data'
+import { componentCategories, peripheralCategories } from '@/lib/data/catagories.data'
 export const category = [
     ...componentCategories,
     ...peripheralCategories

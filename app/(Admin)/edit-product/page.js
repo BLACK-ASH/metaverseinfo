@@ -1,4 +1,5 @@
 "use client"
+
 import { componentCategories, peripheralCategories, subCategories } from "@/lib/data/catagories.data";
 import { Button } from '@/components/ui/button';
 
@@ -26,18 +27,22 @@ import {
 import { toast } from "sonner"
 import { brands } from "@/lib/data/brand.data";
 import { Textarea } from "@/components/ui/textarea";
+import DisplayImages from "@/components/DisplayImages";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import ImageUpload from "@/components/ImageUpload";
 import { categorySpecMap } from "@/lib/data/categoryMap";
-import { addProduct } from "@/lib/products";
+import { getProductBySlug, updateProduct } from "@/lib/products";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
+import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 
 const category = [...componentCategories.map((item) => item.slug), ...peripheralCategories.map((item) => item.slug), "laptop", "pre-built"]
 const brandsList = [...brands.map((item) => item.name)]
+
 const formSchema = z.object({
     name: z.coerce.string().min(2, {
         message: "Product name must be at least 2 characters.",
@@ -68,28 +73,59 @@ const formSchema = z.object({
         })
 })
 
-const page = () => {
+const Page = () => {
+    const [data, setData] = useState({});
+    const searchParams = useSearchParams();
+    const slug = searchParams.get("slug");
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (slug) {
+                const res = await getProductBySlug(slug);
+                setData(res);
+            }
+        };
+        fetchData();
+    }, [slug]);
+
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
             category: "other",
+            brand: "",
             subCategory: "",
             actualPrice: 0,
             offeredPrice: 0,
-            brand: "other",
             description: "",
             inStock: 1,
             images: [],
             specs: {},
         },
-    })
+    });
+
+    // Reset form when data is loaded
+    useEffect(() => {
+        if (data && Object.keys(data).length > 0) {
+            form.reset({
+                name: data.name || "",
+                category: data.category || "other",
+                brand: data.brand || "",
+                subCategory: data.subCategory || "",
+                actualPrice: data.actualPrice || 0,
+                offeredPrice: data.offeredPrice || 0,
+                description: data.description || "",
+                inStock: data.inStock || 0,
+                images: data.images || [],
+                specs: data.specs || {},
+            });
+        }
+    }, [data, form]);
 
     const router = useRouter();
 
-    // 2. Define a submit handler.
     async function onSubmit(values) {
-        const res = await addProduct(values);
+        const res = await updateProduct(data.slug, values);
 
         if (res.status === "success") {
             form.reset();
@@ -100,7 +136,9 @@ const page = () => {
             toast.error(res.message);
         }
     }
+
     const images = form.watch("images");
+
     return (
         <main className="container mx-auto py-10">
             <h2>Add Product</h2>
@@ -117,7 +155,7 @@ const page = () => {
                             <div className="grid grid-cols-2 gap-2 w-full">
                                 {images.map((url, index) => (
                                     <div key={index} className="relative group">
-                                        <AspectRatio ratio={5 / 4}>
+                                        <AspectRatio ratio={16 / 9}>
                                             <Image
                                                 src={url}
                                                 alt={`Product Image ${index + 1}`}
@@ -181,6 +219,7 @@ const page = () => {
                                     </FormItem>
                                 )}
                             />
+
                             <FormField
                                 control={form.control}
                                 name="description"
@@ -194,6 +233,7 @@ const page = () => {
                                     </FormItem>
                                 )}
                             />
+
                             <div className="grid grid-cols-3 gap-4">
                                 <FormField
                                     control={form.control}
@@ -202,11 +242,11 @@ const page = () => {
                                         <FormItem>
                                             <FormLabel>Product Category</FormLabel>
                                             <FormControl>
-                                                <Select defaultValue="other" onValueChange={field.onChange}>
+                                                <Select value={field.value} onValueChange={field.onChange}>
                                                     <SelectTrigger className="w-[180px]">
                                                         <SelectValue placeholder="Category" />
                                                     </SelectTrigger>
-                                                    <SelectContent className={"max-h-60"}>
+                                                    <SelectContent className="max-h-60">
                                                         {category.map((item) => (
                                                             <SelectItem key={item} value={item}>{item}</SelectItem>
                                                         ))}
@@ -220,6 +260,7 @@ const page = () => {
                                         </FormItem>
                                     )}
                                 />
+
                                 <FormField
                                     control={form.control}
                                     name="subCategory"
@@ -227,11 +268,11 @@ const page = () => {
                                         <FormItem>
                                             <FormLabel>Product Sub Category</FormLabel>
                                             <FormControl>
-                                                <Select defaultValue="other" onValueChange={field.onChange}>
+                                                <Select value={field.value} onValueChange={field.onChange}>
                                                     <SelectTrigger className="w-[180px]">
-                                                        <SelectValue placeholder="Category" />
+                                                        <SelectValue placeholder="Sub Category" />
                                                     </SelectTrigger>
-                                                    <SelectContent className={"max-h-60"}>
+                                                    <SelectContent className="max-h-60">
                                                         {[...subCategories.map(e => e.slug), "other"].map((item) => (
                                                             <SelectItem key={item} value={item}>{item}</SelectItem>
                                                         ))}
@@ -245,6 +286,7 @@ const page = () => {
                                         </FormItem>
                                     )}
                                 />
+
                                 <FormField
                                     control={form.control}
                                     name="brand"
@@ -252,11 +294,11 @@ const page = () => {
                                         <FormItem>
                                             <FormLabel>Product Brand</FormLabel>
                                             <FormControl>
-                                                <Select defaultValue="other" onValueChange={field.onChange}>
+                                                <Select value={field.value} onValueChange={field.onChange}>
                                                     <SelectTrigger className="w-[180px]">
-                                                        <SelectValue placeholder="Category" />
+                                                        <SelectValue placeholder="Brand" />
                                                     </SelectTrigger>
-                                                    <SelectContent className={"max-h-60"}>
+                                                    <SelectContent className="max-h-60">
                                                         {brandsList.map((item) => (
                                                             <SelectItem key={item} value={item}>{item}</SelectItem>
                                                         ))}
@@ -270,8 +312,8 @@ const page = () => {
                                         </FormItem>
                                     )}
                                 />
-
                             </div>
+
                             <div className="flex gap-4">
                                 <FormField
                                     control={form.control}
@@ -280,12 +322,13 @@ const page = () => {
                                         <FormItem>
                                             <FormLabel>Product Actual Price</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Product Actual Price" {...field} />
+                                                <Input type="number" placeholder="Product Actual Price" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
+
                                 <FormField
                                     control={form.control}
                                     name="offeredPrice"
@@ -293,12 +336,13 @@ const page = () => {
                                         <FormItem>
                                             <FormLabel>Product Offered Price</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Product Offered Price" {...field} />
+                                                <Input type="number" placeholder="Product Offered Price" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
+
                                 <FormField
                                     control={form.control}
                                     name="inStock"
@@ -335,14 +379,14 @@ const page = () => {
                                     ))}
                                 </div>
                             </div>
-                            <Button type="submit">Add Product</Button>
+
+                            <Button type="submit">Update Product</Button>
                         </form>
                     </Form>
                 </div>
             </div>
-
         </main>
     )
 }
 
-export default page
+export default Page

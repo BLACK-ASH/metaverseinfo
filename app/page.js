@@ -1,16 +1,16 @@
 import CustomBuilds from "@/components/CustomBuilds";
-import DisplayCardSkeleton from "@/components/DisplayCardSkeleton";
 import DisplayCategory from "@/components/DisplayCategory";
 import DisplayProducts from "@/components/DisplayProducts";
 import HomeHeroSection from "@/components/HomeHeroSection";
+import DisplayCardSkeleton from "@/components/skeleton/DisplayCardSkeleton";
+import { ImageKitContext } from "@imagekit/next";
 import { Suspense } from "react";
 
 export async function generateStaticParams(){
   return []
 }
 
-export default async function Home({ searchParams }) {
-  const { category } = await searchParams
+export default function Home({ searchParams }) {
   
   return (
     <div className="container overflow-hidden box-border mx-auto px-4 md:p-6 ">
@@ -23,8 +23,9 @@ export default async function Home({ searchParams }) {
         </Suspense>
       </div>
 
+
       <Suspense fallback={<DisplayCardSkeleton />}>
-        <DisplayProducts category={category || "processor"} />
+        <DisplayProducts searchParams={searchParams}/>
       </Suspense>
     </div>
   );

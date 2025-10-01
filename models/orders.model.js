@@ -4,26 +4,28 @@ const orderStatuses = ["processing", "shipped", "delivered", "cancelled"];
 const paymentStatuses = ["pending", "paid", "failed"];
 
 const OrderSchema = new Schema({
-  orderID: { type: String, required: true, unique: true },
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  username: { type: String, required: true },
+  email: { type: String, required: true },
+  addressState: { type: String, required: true },
+  addressCity: { type: String, required: true },
+  addresszip: { type: String, required: true },
+  fullAddress: { type: String, required: true },
+  
   items: [
     {
+      name: { type: String, required: true },
       product: { type: Schema.Types.ObjectId, ref: "Products", required: true },
       quantity: { type: Number, required: true },
     },
   ],
   totalPrice: { type: Number, required: true },
+  
+  paymentOrderId: { type: String, required: true, unique: true },
   paymentStatus: { type: String, enum: paymentStatuses, default: "pending" },
   paymentId: { type: String },
   receipt: { type: String },
   orderStatus: { type: String, enum: orderStatuses, default: "processing" },
-  shippingAddress: {
-    street: String,
-    city: String,
-    state: String,
-    zip: String,
-    country: String,
-  },
+
 }, { timestamps: true });
 
 // Use singular "Order" consistently

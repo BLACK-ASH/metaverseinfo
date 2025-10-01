@@ -17,25 +17,31 @@ export const LoadingImg = () => {
     )
 }
 
-const ItemCard = ({ name, id, price, img, catgory, desc }) => {
+const ItemCard = ({ id, name, slug, actualPrice, offeredPrice, images, category }) => {
     const { addProduct } = useCartStore();
     return (
         <Card className={'!pt-0 overflow-hidden'} >
-            <Link href={`/products/all/${id}`}>
-                <DisplayImages h={400} w={500} ratio={5 / 4} duration={5000} className='w-full h-full' images={img} />
+            <Link href={`/products/all/${slug}`}>
+                <DisplayImages h={400} w={500} ratio={5 / 4} duration={5000} className='w-full h-full' images={images} />
                 <Separator className='mb-2' />
                 <CardHeader>
+                    <Badge variant="outline">{category}</Badge>
                     <CardTitle>{name}</CardTitle>
-                    <Badge variant="outline">{catgory}</Badge>
                 </CardHeader>
             </Link>
             <CardFooter className={"flex flex-col gap-2 items-start sm:flex-row sm:items-center justify-between"}>
                 <div>
-                    <p className='font-bold text-lg px-3'>
-                        &#8377; {price}
-                    </p>
+                    {
+                        offeredPrice > 0 ?
+                            <p className='font-bold text-lg px-3'>
+                                &#8377;{offeredPrice} <span className='line-through text-destructive text-sm'>&#8377;{actualPrice} </span>
+                            </p>
+                            :
+                            <p className='font-bold text-lg px-3'>
+                                &#8377; {actualPrice}
 
-
+                            </p>
+                    }
                 </div>
                 <div>
                     <Button onClick={() => {

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Skeleton } from './ui/skeleton'
+import { Skeleton } from '../ui/skeleton'
+
 
 const CartItemSkeleton = () => {
   return (

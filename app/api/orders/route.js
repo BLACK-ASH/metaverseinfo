@@ -11,7 +11,7 @@ const razorpay = new Razorpay({
 
 export async function POST(req) {
     try {
-        const { cart, userId } = await req.json();
+        const { cart, userId, name, email } = await req.json();
 
         if (!cart || !Array.isArray(cart) || cart.length === 0) {
             return NextResponse.json({ error: "Cart is empty or invalid" }, { status: 400 });
@@ -27,7 +27,14 @@ export async function POST(req) {
             return { ...product, quantity: cartItem?.quantity || 1 };
         });
 
-        const totalAmount = merged.reduce((total, item) => total + item.price * item.quantity, 0) + 150;
+        const totalAmount = merged.reduce((total, item) => {
+            if (item.offeredPrice > 0) {
+                const price = item.offeredPrice
+                return total + price * item.quantity
+            }
+            const price = item.actualPrice
+            return total + price * item.quantity
+        }, 0) + 150;
 
         const options = {
             amount: Math.round(totalAmount * 100),
@@ -38,15 +45,23 @@ export async function POST(req) {
         const order = await razorpay.orders.create(options);
 
         const dbOrder = await Orders.create({
-            user: userId,
-            orderID: order.id,
+            username: name,
+            email,
+            paymentOrderId: order.id,
             items: merged.map((item) => ({
+                name: item.name,
                 product: item._id,      // ✅ correct field name
                 quantity: item.quantity,
             })),
-            totalPrice: order.amount/100,
+            totalPrice: order.amount / 100,
             receipt: order.receipt,
             paymentStatus: "pending",
+
+            // Change these to user's address 
+            addressState: "Maharashtra",
+            addressCity: "Mumbai",
+            addresszip: "400040",
+            fullAddress: "address",
         });
 
 

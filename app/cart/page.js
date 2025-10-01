@@ -1,6 +1,6 @@
 "use client";
 import CartItemCard from '@/components/CartItemCard';
-import CartItemSkeleton from '@/components/CartItemSkeleton';
+import CartItemSkeleton from '@/components/skeleton/CartItemSkeleton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -20,7 +20,15 @@ const CartPage = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0) + 150;
+
+  const totalAmount = items.reduce((total, item) => {
+    if (item.offeredPrice > 0) {
+      const price = item.offeredPrice
+      return total + price * item.quantity
+    }
+    const price = item.actualPrice
+    return total + price * item.quantity
+  }, 0) + 150;
 
   const router = useRouter();
 
@@ -36,14 +44,19 @@ const CartPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ cart, userId: user._id }),
+        body: JSON.stringify({ cart, userId: user._id,name:user.name,email:user.email, }),
       });
       const data = await res.json();
 
+      if (data.error) {
+        toast.error(data.error);
+        return;
+      }
+
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        order_id: data.orderID,
-        amount: Math.round(totalPrice * 100),
+        order_id: data.paymentOrderId,
+        amount: Math.round(totalAmount * 100),
         handler: async function (response) {
           const res = await fetch("/api/orders/verify", {
             method: "POST",
@@ -89,9 +102,9 @@ const CartPage = () => {
 
       try {
         const ids = cart.map((item) => item.id);
-        const products = await getProductsByIds(ids);
+        const products = await getProductsByIds(ids);    
 
-        const merged = products.map((product) => {
+        const merged = products?.map((product) => {
           const cartItem = cart.find((c) => c.id === product._id.toString());
           return { ...product, quantity: cartItem?.quantity || 1 };
         });
@@ -140,7 +153,8 @@ const CartPage = () => {
           {items.map((item) => (
             <div key={item._id} className="flex justify-between">
               <p className="text-muted-foreground">{item.name} x {item.quantity}</p>
-              <p className="font-bold">₹{item.price * item.quantity}</p>
+              <p className="font-bold">₹{
+                item.offeredPrice > 0 ? item.offeredPrice * item.quantity : item.actualPrice * item.quantity}</p>
             </div>
           ))}
           <div className="flex justify-between">
@@ -150,7 +164,7 @@ const CartPage = () => {
           <Separator className="my-2" />
           <div className="flex justify-between">
             <p className="font-bold">Total Price</p>
-            <p className="font-bold">₹{totalPrice}</p>
+            <p className="font-bold">₹{totalAmount}</p>
           </div>
         </CardContent>
         <CardFooter>

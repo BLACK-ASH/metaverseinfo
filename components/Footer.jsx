@@ -5,7 +5,7 @@ import { Separator } from './ui/separator'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from './ui/button'
-import { componentCategories, peripheralCategories, subCategories } from '@/lib/catagories.data'
+import { componentCategories, peripheralCategories, subCategories } from '@/lib/data/catagories.data'
 
 const items = subCategories;
 

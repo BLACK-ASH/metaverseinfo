@@ -17,7 +17,6 @@ export async function middleware(request) {
             return NextResponse.redirect(new URL('/', request.url));
         }
 
-        console.log("Admin verified");
         return NextResponse.next();
     } catch (error) {
         console.error("JWT verification failed:", error);

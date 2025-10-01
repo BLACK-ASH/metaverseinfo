@@ -8,7 +8,7 @@ import NavbarMenu from './NavbarMenu'
 
 const Navbar = async () => {
     return (
-        <nav suppressHydrationWarning className='flex flex-col gap-4 md:flex-row items-center justify-between px-4 py-2 w-full'>
+        <nav className='flex flex-col gap-4 md:flex-row items-center justify-between px-4 py-2 w-full'>
             <div className='flex items-center justify-between max-md:w-full'>
                 <div className="flex items-center gap-2">
                     <Image src="/logo.png" alt="logo" width={30} height={30} />

@@ -1,6 +1,6 @@
 import { getUser } from '@/lib/auth.action';
 import Link from 'next/link';
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import {
     NavigationMenu,
@@ -11,7 +11,7 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-import { componentCategories, peripheralCategories, subCategories } from '@/lib/catagories.data';
+import { componentCategories, peripheralCategories, subCategories } from '@/lib/data/catagories.data';
 
 const items = subCategories;
 
@@ -33,15 +33,15 @@ const adminRoute = [
         url: "/orders",
     },
     {
-        title:"Add Product",
-        url:"/add-product",
+        title: "Add Product",
+        url: "/add-product",
     }
 ]
 
 const NavbarMenu = async () => {
     const user = await getUser();
     return (
-        <NavigationMenu className="z-50" viewport={false}>
+        <NavigationMenu suppressHydrationWarning className="z-50" viewport={false}>
 
             <NavigationMenuList className={"flex flex-wrap"}>
                 <NavigationMenuItem>
@@ -115,21 +115,22 @@ const NavbarMenu = async () => {
                     </NavigationMenuLink>
                 </NavigationMenuItem>
 
-
-                {user?.role === "admin" && 
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger>Admins</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        {adminRoute.map((item) => (
-                            <NavigationMenuLink key={item.title} asChild>
-                                <Link href={item.url} className={navigationMenuTriggerStyle()}>
-                                    {item.title}
-                                </Link>
-                            </NavigationMenuLink>
-                        ))}
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-                }
+                <Suspense fallback={<div>Loading...</div>}>
+                    {user?.role === "admin" &&
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>Admins</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                {adminRoute.map((item) => (
+                                    <NavigationMenuLink key={item.title} asChild>
+                                        <Link href={item.url} className={navigationMenuTriggerStyle()}>
+                                            {item.title}
+                                        </Link>
+                                    </NavigationMenuLink>
+                                ))}
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+                    }
+                </Suspense>
             </NavigationMenuList>
 
         </NavigationMenu>

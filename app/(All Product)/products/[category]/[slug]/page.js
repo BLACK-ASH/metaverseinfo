@@ -2,27 +2,23 @@
 import DisplayImages from "@/components/DisplayImages";
 import ProductAction from "@/components/ProductAction";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getProductsByIds } from "@/lib/products";
+import { getProductBySlug } from "@/lib/products";
 import { notFound } from "next/navigation";
-
-
-// Optional: Set revalidate to refresh static cache for popular products
-export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
-    const product = await getProductsByIds([slug]);
-    if (!product || !product[0]) {
-        return { title: "Product not found", description: "This product does not exist" };
-    }
+    const product = await getProductBySlug(slug);
 
-    return {
-        title: `${product[0].name} - Metaverse Info`,
-        description: product[0].desc,
-        openGraph: {
-            images: product[0].img,
-        },
-    };
+    if (product) {
+        return {
+            title: `${product?.name} - Metaverse Info`,
+            description: product?.desc,
+            openGraph: {
+                images: product?.img,
+            },
+        };
+    }
+    return { title: "Product not found", description: "This product does not exist" };
 }
 
 export default async function Page({ params }) {
@@ -31,9 +27,9 @@ export default async function Page({ params }) {
     let product;
 
     try {
-        // replace the id with slug
-        product = await getProductsByIds([slug]);
-        if (!product || !product[0]) {
+        product = await getProductBySlug(slug)
+
+        if (!product) {
             notFound();
         }
     } catch (error) {
@@ -44,17 +40,19 @@ export default async function Page({ params }) {
     return (
         <section className="container overflow-hidden box-border mx-auto px-4 md:p-6 min-h-[calc(80vh-60px)] grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Card>
-                <DisplayImages w={500} h={400} duration={6000} ratio={5 / 4} images={product[0].img} />
+                <DisplayImages w={500} h={400} duration={6000} ratio={5 / 4} images={product?.images} />
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-2xl font-bold">{product[0].name}</CardTitle>
+                    <CardTitle className="text-2xl font-bold">{product?.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-muted-foreground">{product[0].desc}</p>
-                    <p className="text-lg font-bold">&#8377; {product[0].price}</p>
+                    <p className="text-muted-foreground">{product?.description}</p>
+                    <p className='font-bold text-lg px-3'>
+                        &#8377; {product?.offeredPrice || product?.actualPrice} <span className='line-through text-sm'>&#8377; {product?.actualPrice} </span>
+                    </p>
                 </CardContent>
-                <ProductAction id={product[0]._id} />
+                <ProductAction id={product._id} />
             </Card>
         </section>
     );

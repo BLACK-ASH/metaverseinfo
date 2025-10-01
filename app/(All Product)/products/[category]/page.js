@@ -1,7 +1,7 @@
 import FilterItem from '@/components/FilterItem';
 import ItemCard from '@/components/ItemCard';
 import CustomPagination from '@/components/PageFooter';
-import { componentCategories } from '@/lib/catagories.data';
+import { componentCategories } from '@/lib/data/catagories.data';
 import searchProducts from '@/lib/searchProduct';
 import { Suspense } from 'react';
 
@@ -45,10 +45,12 @@ const page = async ({ params, searchParams }) => {
                         key={product._id}
                         id={product._id}
                         name={product.name}
+                        slug={product.slug}
                         desc={product.desc}
-                        price={product.price}
-                        img={product.img}
-                        catgory={product.category}
+                        category={product.category}
+                        actualPrice={product.actualPrice}
+                        offeredPrice={product.offeredPrice}
+                        images={product.images}
                     />
                 ))}
             </div>

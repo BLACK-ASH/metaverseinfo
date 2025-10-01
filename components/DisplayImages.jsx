@@ -50,7 +50,7 @@ const DisplayImages = ({
       <CarouselContent>
         {images.map((url, i) => (
           <CarouselItem className={cn("relative", className)} key={i}>
-            <AspectRatio ratio={ratio || w / h} className="w-full h-full">
+            <AspectRatio ratio={ratio || 1/1} className="w-full h-full">
               <IKImage
                 className="object-cover"
                 urlEndpoint="https://ik.imagekit.io/ashif"

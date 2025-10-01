@@ -12,8 +12,8 @@ const CartItemCard = ({ data }) => {
     return (
         <div>
             <div className='flex gap-3'>
-                {data.img && (
-                    <Image src={data.img[0]} alt={data.name} width={100} height={100} />
+                {data.images && (
+                    <Image src={data.images[0]} alt={data.name} width={100} height={100} />
                 )}
                 <div className='relative flex-1'>
                     <div className='flex justify-between  gap-2 items-center'>
@@ -22,7 +22,7 @@ const CartItemCard = ({ data }) => {
                     </div>
                     <div className='text-muted-foreground text-sm'>
                         <p> Product ID : {data._id}</p>
-                        <p> Price : <span className='font-bold'>&#8377; {data.price}</span> </p>
+                        <p> Price : <span className='font-bold'>&#8377; {data.offeredPrice>0 ? data.offeredPrice : data.actualPrice}</span> </p>
                     </div>
                     <div className='flex absolute bottom-0 right-0 gap-2 mt-2'>
                         <ToggleGroup type="single" variant="outline">
