@@ -65,7 +65,7 @@ export async function POST(req) {
         });
 
 
-        return NextResponse.json(dbOrder);
+        return NextResponse.json(dbOrder, { status: 200 });
     } catch (error) {
         console.error("Order creation failed:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });

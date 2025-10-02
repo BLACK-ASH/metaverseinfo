@@ -4,7 +4,8 @@ import Products from "@/models/products.model"; // import products
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { sendEmail } from "@/lib/mailer";
-import mongoose from "mongoose";
+import { invalidateOrderCache } from "@/lib/order.action";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req) {
   const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
@@ -71,6 +72,10 @@ export async function POST(req) {
     catch (err) {
       console.error("Error sending email:", err);
     }
+
+
+    await invalidateOrderCache(order.email);
+    revalidatePath(`/my-orders`);
 
     return NextResponse.json(
       { message: "Payment verified & stock updated.", status: "confirmed" },

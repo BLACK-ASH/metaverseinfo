@@ -5,22 +5,22 @@ import CartItemSkeleton from '@/components/skeleton/CartItemSkeleton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { getUser } from '@/lib/auth.action';
 import { getProductsByIds } from '@/lib/products';
 import useCartStore from '@/stores/cartStore';
 import { Separator } from '@radix-ui/react-dropdown-menu';
-import { ArrowUpRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 
 const CartPage = () => {
   const { cart, clearCart } = useCartStore();
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const totalAmount = items.reduce((total, item) => {
     if (item.offeredPrice > 0) {
@@ -34,6 +34,7 @@ const CartPage = () => {
   const router = useRouter();
 
   const handleCheckout = async () => {
+    let orderData;
     if (!user) {
       toast.error("Please login to checkout.");
       return;
@@ -47,48 +48,12 @@ const CartPage = () => {
         },
         body: JSON.stringify({ cart, userId: user.id, name: user.name, email: user.email, }),
       });
-      const data = await res.json();
+      orderData = await res.json();
 
-      if (data.error) {
-        toast.error(data.error);
+      if (orderData.error) {
+        toast.error(orderData.error);
         return;
       }
-    }
-    catch (err) {
-      console.log(err);
-      toast.error(err);
-    }
-
-    try {
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        order_id: data.paymentOrderId,
-        amount: Math.round(totalAmount * 100),
-        handler: async function (response) {
-          const res = await fetch("/api/orders/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(response),
-          })
-          const data = await res.json();
-          if (data.status === "confirmed") {
-            clearCart();
-            toast.success("Payment successful.");
-            router.push("/my-orders");
-            return;
-          }
-          else {
-            toast.error(
-              data.error
-            );
-          }
-        },
-      };
-
-      const rzp1 = new window.Razorpay(options);
-      rzp1.open();
     }
     catch (err) {
       console.log(err);
@@ -97,6 +62,47 @@ const CartPage = () => {
     finally {
       setIsProcessing(false);
     }
+
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      order_id: orderData.paymentOrderId,
+      amount: Math.round(totalAmount * 100),
+      handler: async function (response) {
+        try {
+          setIsVerifying(true);
+          const res = await fetch("/api/orders/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(response),
+          })
+          const verifyPaymentData = await res.json();
+          if (verifyPaymentData.status === "confirmed") {
+            clearCart();
+            toast.success("Payment successful.");
+            router.push("/my-orders");
+            return;
+          }
+          else {
+            toast.error(
+              verifyPaymentData.error
+            );
+          }
+        }
+        catch (err) {
+          console.log(err);
+          toast.error(err);
+        }
+        finally {
+          setIsVerifying(false);
+        }
+
+      },
+    };
+
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
   };
 
   useEffect(() => {
@@ -128,48 +134,61 @@ const CartPage = () => {
   }, [cart]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      <ScrollArea className="flex-1 col-span-2 h-[80vh] border p-4 rounded-md box-border">
-        {cart.length === 0 && !loading && <p className="text-muted-foreground">Your cart is empty</p>}
-        {loading && <CartItemSkeleton />}
-        {items.map((item) => (
-          <CartItemCard key={item._id} data={item} />
-        ))}
-      </ScrollArea>
-
-      <Card>
-        <CardHeader>
-          <h1 className="text-2xl font-bold">Cart Summary</h1>
-          <div className="flex justify-between">
-            <p className="font-bold">Total Items</p>
-            <p className="font-bold">{items.length}</p>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {items.length === 0 && <p className="text-muted-foreground">Your cart is empty</p>}
+    <div className='relative'>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <ScrollArea className="flex-1 col-span-2 h-[80vh] border p-4 rounded-md box-border">
+          {cart.length === 0 && !loading && <p className="text-muted-foreground">Your cart is empty</p>}
+          {loading && <CartItemSkeleton />}
           {items.map((item) => (
-            <div key={item._id} className="flex justify-between">
-              <p className="text-muted-foreground">{item.name} x {item.quantity}</p>
-              <p className="font-bold">₹{
-                item.offeredPrice > 0 ? item.offeredPrice * item.quantity : item.actualPrice * item.quantity}</p>
-            </div>
+            <CartItemCard key={item._id} data={item} />
           ))}
-          <div className="flex justify-between">
-            <p className="text-foreground">Delivery Charge</p>
-            <p className="font-bold">₹150</p>
-          </div>
-          <Separator className="my-2" />
-          <div className="flex justify-between">
-            <p className="font-bold">Total Price</p>
-            <p className="font-bold">₹{totalAmount}</p>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button disabled={items.length === 0 || isProcessing} onClick={handleCheckout} className="w-full"><ArrowUpRight className="size-4" />
-            {isProcessing ? "Processing..." : "Checkout"}
-          </Button>
-        </CardFooter>
-      </Card>
+        </ScrollArea>
+
+        <Card>
+          <CardHeader>
+            <h1 className="text-2xl font-bold">Cart Summary</h1>
+            <div className="flex justify-between">
+              <p className="font-bold">Total Items</p>
+              <p className="font-bold">{items.length}</p>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {items.length === 0 && <p className="text-muted-foreground">Your cart is empty</p>}
+            {items.map((item) => (
+              <div key={item._id} className="flex justify-between">
+                <p className="text-muted-foreground">{item.name} x {item.quantity}</p>
+                <p className="font-bold">₹{
+                  item.offeredPrice > 0 ? item.offeredPrice * item.quantity : item.actualPrice * item.quantity}</p>
+              </div>
+            ))}
+            <div className="flex justify-between">
+              <p className="text-foreground">Delivery Charge</p>
+              <p className="font-bold">₹150</p>
+            </div>
+            <Separator className="my-2" />
+            <div className="flex justify-between">
+              <p className="font-bold">Total Price</p>
+              <p className="font-bold">₹{totalAmount}</p>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button
+              disabled={items.length === 0 || isProcessing || isVerifying}
+              onClick={handleCheckout}
+              className="w-full"
+            >
+              {(isProcessing || isVerifying) && (
+                <Loader2 className="size-4 mr-2 animate-spin" />
+              )}
+              {isProcessing
+                ? "Creating Order..."
+                : isVerifying
+                  ? "Verifying Payment..."
+                  : "Checkout"}
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   );
 };

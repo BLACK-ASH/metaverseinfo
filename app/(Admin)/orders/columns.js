@@ -10,73 +10,109 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Badge } from "@/components/ui/badge"
+
+// _id: '68dcf6de3f1272f4ddc1b886',
+//     username: 'Anime Vault',
+//     email: 'animevault21@gmail.com',
+//     addressState: 'Maharashtra',
+//     addressCity: 'Mumbai',
+//     addresszip: '400040',
+//     fullAddress: 'address',
+//     items: [ [Object] ],
+//     totalPrice: 1149,
+//     paymentOrderId: 'order_ROA8DwSsQEupbt',
+//     paymentStatus: 'paid',
+//     receipt: 'receipt_1759311582081',
+//     orderStatus: 'processing',
+//     createdAt: '2025-10-01T09:39:42.739Z',
+//     updatedAt: '2025-10-01T09:40:12.024Z',
+//     __v: 0,
+//     paymentId: 'pay_ROA8RV6IW0rhUb'
+
 
 export const columns = [
     {
         accessorKey: "paymentStatus",
-        header: "Payment Status",
+        header: "Status",
         cell: ({ row }) => {
-            const status = row.getValue("paymentStatus")
-            switch (status) {
-                case "pending":
-                    return <div className="text-yellow-700 bg-yellow-50 dark:bg-yellow-700 dark:text-yellow-50 w-fit px-3 rounded-full">{status}</div>
-                case "paid":
-                    return <div className="text-green-700 bg-green-50 dark:bg-green-700 dark:text-green-50 w-fit px-3 rounded-full">{status}</div>
-                case "failed":
-                    return <div className="text-red-700 bg-red-50 dark:bg-red-700 dark:text-red-50 w-fit px-3 rounded-full">{status}</div>
-                default:
-                    return <div className="text-gray-700 bg-gray-50 w-fit px-3 rounded-full">{status}</div>
-            }
+            const payment = row.original
+            return (
+                <Badge variant={payment.paymentStatus}>{payment.paymentStatus}</Badge>
+            )
         },
-
     },
     {
-        accessorKey: "status",
+        accessorKey: "orderStatus",
         header: "Order Status",
         cell: ({ row }) => {
-            switch (row.getValue("status")) {
-                case "processing":
-                    return <div className="text-yellow-700 bg-yellow-50 dark:bg-yellow-700 dark:text-yellow-50 w-fit px-3 rounded-full">{row.getValue("status")}</div>
-                case "shipped":
-                    return <div className="text-blue-700 bg-blue-50 dark:bg-blue-700 dark:text-blue-50 w-fit px-3 rounded-full">{row.getValue("status")}</div>
-                case "delivered":
-                    return <div className="text-green-700 bg-green-50 dark:bg-green-700 dark:text-green-50 w-fit px-3 rounded-full">{row.getValue("status")}</div>
-                case "cancelled":
-                    return <div className="text-red-700 bg-red-50 dark:bg-red-700 dark:text-red-50 w-fit px-3 rounded-full">{row.getValue("status")}</div>
-                default:
-                    return <div className="text-gray-700 bg-gray-50 w-fit px-3 rounded-full">{row.getValue("status")}</div>
-            }
-        }
+            const payment = row.original
+            return (
+                <Badge variant={payment.orderStatus}>{payment.orderStatus}</Badge>
+            )
+        },
     },
     {
         accessorKey: "username",
-        header: "Name",
-    },
-    {
-        accessorKey: "orderID",
-        header: "Order ID",
-    },
-    {
-        accessorKey: "paymentId",
-        header: "Payment ID",
-    },
-    {
-        accessorKey: "receipt",
-        header: "Receipt ",
-    },
-    {
-        accessorKey: "totalAmount",
-        header: "Amount",
+        header: "Username",
         cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("totalAmount"))
-            const formatted = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "INR",
-            }).format(amount)
-
-            return <div className="font-medium">{formatted}</div>
-        },
+            const payment = row.original
+            return (
+                <div>
+                    {payment.username}
+                </div>
+            )
+        }
     },
+    {
+        accessorKey: "email",
+        header: "Email",
+        cell: ({ row }) => {
+            const payment = row.original
+            return (
+                <div>
+                    {payment.email}
+                </div>
+            )
+        }
+    },
+    {
+        accessorKey: "totalPrice",
+        header: "Total Price",
+        cell: ({ row }) => {
+            const payment = row.original
+            return (
+                <div>
+                    {payment.totalPrice}
+                </div>
+            )
+        }
+    },
+    {
+        accessorKey: "addressState",
+        header: "State",
+        cell: ({ row }) => {
+            const payment = row.original
+            return (
+                <div>
+                    {payment.addressState}
+                </div>
+            )
+        }
+    },
+    {
+        accessorKey: "addressCity",
+        header: "City",
+        cell: ({ row }) => {
+            const payment = row.original
+            return (
+                <div>
+                    {payment.addressCity}
+                </div>
+            )
+        }
+    }
+    ,
     {
         id: "actions",
         cell: ({ row }) => {
@@ -98,7 +134,7 @@ export const columns = [
                             Copy payment ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        
+
                     </DropdownMenuContent>
                 </DropdownMenu>
             )

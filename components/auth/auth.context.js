@@ -1,11 +1,21 @@
 "use client";
-import { loginUser, logoutUser } from "@/lib/auth.action";
-import { createContext, useContext, useState } from "react";
+import { getUser, loginUser, logoutUser } from "@/lib/auth.action";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const authContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+
+    useEffect(() => {
+       const fetchUser = async () => {
+           const user = await getUser();
+           setUser(user);
+       }
+       if (typeof window !== "undefined") {
+           fetchUser();
+       }
+    }, []);
 
     const login = async (values) => {
         const res = await loginUser(values);
