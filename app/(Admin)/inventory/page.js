@@ -1,4 +1,5 @@
 import DisplayCategory from '@/components/DisplayCategory';
+import InventoryRefresh from '@/components/InventoryRefresh';
 import CustomPagination from '@/components/PageFooter';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,8 +13,8 @@ import React, { Suspense } from 'react'
 
 const Inventory = async ({ searchParams }) => {
   const { query, category, sort, max, page, limit } = await searchParams
-  const { data, count } = await getProducts(query, category, sort, max, page || 1, limit || 18)
-  
+  const { data, count } = await getProducts(query, category, sort, max, page, limit)
+
   return (
     <div className='m-4'>
       <div className='flex justify-between items-center m-2'>
@@ -21,9 +22,12 @@ const Inventory = async ({ searchParams }) => {
           <h1 className='text-2xl font-bold'>Inventory</h1>
           <p className='text-muted-foreground my-3'>{count} results found</p>
         </div>
-        <Button asChild>
-          <Link href="/add-product">Add Product</Link>
-        </Button>
+        <div>
+          <InventoryRefresh />
+          <Button asChild>
+            <Link href="/add-product">Add Product</Link>
+          </Button>
+        </div>
       </div>
       <Suspense>
         <DisplayCategory />
@@ -62,7 +66,7 @@ const Inventory = async ({ searchParams }) => {
         ))}
       </div>
       <Suspense>
-        <CustomPagination count={count} limit={18} />
+        <CustomPagination count={count} limit={12} />
       </Suspense>
 
     </div>

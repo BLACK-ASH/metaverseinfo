@@ -111,6 +111,18 @@ export const columns = [
                 </div>
             )
         }
+    },
+    {
+        accessorKey: "createdAt",
+        header: "Date",
+        cell: ({ row }) => {
+            const payment = row.original
+            return (
+                <div>
+                    {new Date(payment.createdAt).toDateString()}
+                </div>
+            )
+        }
     }
     ,
     {

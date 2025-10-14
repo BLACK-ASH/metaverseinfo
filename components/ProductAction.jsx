@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { MinusIcon, PlusIcon } from 'lucide-react'
 
-const ProductAction = ({ id }) => {
+const ProductAction = ({ id,inStock }) => {
     const { addProduct } = useCartStore();
     const [quantity, setQuantity] = useState(1);
     return (
@@ -18,6 +18,9 @@ const ProductAction = ({ id }) => {
                 <ToggleGroupItem aria-label="Product Quantity" disabled>{quantity}</ToggleGroupItem>
                 <ToggleGroupItem aria-label="Increase Quantity" onClick={() => setQuantity((prev) => prev + 1)} ><PlusIcon className='size-3' /></ToggleGroupItem>
             </ToggleGroup>
+
+            <p>In Stock: {inStock}</p>
+
 
             <Button onClick={() => {
                 addProduct(id, quantity)

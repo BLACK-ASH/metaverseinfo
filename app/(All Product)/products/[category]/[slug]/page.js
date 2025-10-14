@@ -1,9 +1,12 @@
 // app/products/[id]/page.jsx
 import DisplayImages from "@/components/DisplayImages";
 import ProductAction from "@/components/ProductAction";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { getProductBySlug } from "@/lib/products";
 import { notFound } from "next/navigation";
+import { Ca } from "zod/v4/locales";
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
@@ -45,14 +48,29 @@ export default async function Page({ params }) {
             <Card>
                 <CardHeader>
                     <CardTitle className="text-2xl font-bold">{product?.name}</CardTitle>
+                    <CardDescription className="text-muted-foreground flex gap-2">
+                        <Badge variant={"outline"}>{product?.category}</Badge>
+                        <Badge variant={"outline"}>{product?.brand}</Badge>
+                    </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">{product?.description}</p>
+
+                    <Table>
+                        <TableBody>
+                            {Object.entries(product?.specs).map(([key, value]) => (
+                                <TableRow key={key}>
+                                    <TableCell className="font-medium">{key}</TableCell>
+                                    <TableCell>{value}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                     <p className='font-bold text-lg px-3'>
                         &#8377; {product?.offeredPrice || product?.actualPrice} <span className='line-through text-sm'>&#8377; {product?.actualPrice} </span>
                     </p>
                 </CardContent>
-                <ProductAction id={product._id} />
+                <ProductAction inStock={product?.inStock} id={product._id} />
             </Card>
         </section>
     );

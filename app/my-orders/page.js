@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { getUser } from '@/lib/auth.action';
+import { getUser, isLogin } from '@/lib/auth.action';
 import { getOrderByUser, invalidateOrderCache } from '@/lib/order.action';
 import React from 'react'
 import {
@@ -14,19 +14,24 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import OrderRefresh from '@/components/OrderRefresh';
+import { redirect } from 'next/navigation';
 
 
 
 const myOrder = async () => {
+  const isLoginUser = await isLogin();
+  if (!isLoginUser) return redirect("/login");
 
   const { name, email } = await getUser();
+
   const myOrders = await getOrderByUser(email);
 
   return (
     <section className="container overflow-hidden box-border mx-auto px-4 md:p-6 min-h-[calc(100vh-110px)]" id='myOrders'>
       <div>
-        <div>
+        <div className='flex justify-between items-center'>
           <h1 className='text-2xl font-bold'>My Orders</h1>
+          <OrderRefresh key={email} />
         </div>
         <h3 className='text-lg'>hi, <span className='font-bold'>{name}</span> here are your orders </h3>
       </div>
